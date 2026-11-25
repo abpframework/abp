@@ -45,6 +45,18 @@ public class MongoClient_Factory_Tests : MongoDbTestBase
     }
 
     [Fact]
+    public async Task Should_Return_Different_Instances_For_Different_Credentials()
+    {
+        var mongoUrl1 = new MongoUrl("mongodb://user1:pass1@localhost:27017/db");
+        var mongoUrl2 = new MongoUrl("mongodb://user2:pass2@localhost:27017/db");
+
+        var client1 = await _factory.GetAsync(mongoUrl1);
+        var client2 = await _factory.GetAsync(mongoUrl2);
+
+        Assert.NotSame(client1, client2);
+    }
+
+    [Fact]
     public async Task Should_Not_Throw_For_Valid_But_Unreachable_Connection()
     {
         // Arrange

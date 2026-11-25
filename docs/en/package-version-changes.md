@@ -7,6 +7,13 @@
 
 # Package Version Changes
 
+## 11.0.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| MongoDB.Driver | 3.14.0 | 3.14.1 | #26538 |
+| Npgsql.EntityFrameworkCore.PostgreSQL | 11.0.0-rc.3 | 11.0.0 | #26540 |
+
 ## 11.0.0-rc.2
 
 | Package | Old Version | New Version | PR |

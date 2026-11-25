@@ -9,7 +9,18 @@
 
 This document contains **brief release notes** for each ABP Studio release. Release notes only include **major features** and **visible enhancements**. Therefore, they don't include all the development done in the related version. 
 
-## 3.1.6 (2026-10-21) Latest
+## 4.0.0 (2026-11-23) Latest
+
+* Fix empty last page and missing messages in MudBlazor sample pages
+* Speed up macOS release pipeline by publishing on the Windows agent
+* Remove the browser-cache warning after HTTPS certificate trust
+* Copying the fix on the tenant impersonation for the react templates
+* Count attached images as visual tokens
+* Refactoring E2E tests to improve handling of agent turns and model streaming
+* Fix Windows unit tests that miss paths and share process environment
+* Point campaign banner to the volosoft/cdn repository
+
+## 3.1.6 (2026-10-21)
 
 * Fix generated book tests failing on the required author foreign key
 * Replace UseUnitOfWork with UseAbpExceptionHandling in templates

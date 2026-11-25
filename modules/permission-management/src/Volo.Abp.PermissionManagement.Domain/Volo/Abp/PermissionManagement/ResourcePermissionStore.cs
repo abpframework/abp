@@ -39,7 +39,7 @@ public class ResourcePermissionStore : IResourcePermissionStore, ITransientDepen
 
     protected virtual async Task<ResourcePermissionGrantCacheItem> GetCacheItemAsync(string name, string resourceName, string resourceKey, string providerName, string providerKey)
     {
-        var cacheKey = CalculateCacheKey(name, providerName, providerKey, resourceName, resourceKey);
+        var cacheKey = CalculateCacheKey(name, resourceName, resourceKey, providerName, providerKey);
 
         Logger.LogDebug($"ResourcePermissionStore.GetCacheItemAsync: {cacheKey}");
 
