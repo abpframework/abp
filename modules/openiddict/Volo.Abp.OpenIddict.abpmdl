@@ -66,6 +66,14 @@
     "Volo.Abp.PermissionManagement.Domain.OpenIddict": {
       "path": "src/Volo.Abp.PermissionManagement.Domain.OpenIddict/Volo.Abp.PermissionManagement.Domain.OpenIddict.abppkg",
       "folder": "src"
+    },
+    "Volo.Abp.OpenIddict.AgentTools": {
+      "path": "src/Volo.Abp.OpenIddict.AgentTools/Volo.Abp.OpenIddict.AgentTools.abppkg",
+      "folder": "src"
+    },
+    "Volo.Abp.OpenIddict.AgentTools.Tests": {
+      "path": "test/Volo.Abp.OpenIddict.AgentTools.Tests/Volo.Abp.OpenIddict.AgentTools.Tests.abppkg",
+      "folder": "test"
     }
   }
 }

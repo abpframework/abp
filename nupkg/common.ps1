@@ -93,6 +93,10 @@ $solutions = (
 $projects = (
 
     # framework
+    "framework/src/Volo.Abp.AgentTools.Abstractions",
+    "framework/src/Volo.Abp.AgentTools",
+    "framework/src/Volo.Abp.AgentTools.AspNetCore",
+    "framework/src/Volo.Abp.AgentTools.Mcp",
     "framework/src/Volo.Abp.AI.Abstractions",
     "framework/src/Volo.Abp.AI",
     "framework/src/Volo.Abp.ApiVersioning.Abstractions",
@@ -411,6 +415,7 @@ $projects = (
     "source-code/Volo.Abp.IdentityServer.SourceCode",
 
     # modules/openiddict
+    "modules/openiddict/src/Volo.Abp.OpenIddict.AgentTools",
     "modules/openiddict/src/Volo.Abp.OpenIddict.AspNetCore",
     "modules/openiddict/src/Volo.Abp.OpenIddict.Domain",
     "modules/openiddict/src/Volo.Abp.OpenIddict.Domain.Shared",
