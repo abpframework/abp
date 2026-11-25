@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Guids;
+using Volo.Abp.Domain.Entities;
 using Xunit;
 
 namespace Volo.CmsKit.Tags;
@@ -70,6 +71,18 @@ public class EntityTagManager_Tests : CmsKitDomainTestBase
         tags.ShouldNotBeNull();
         tags.ShouldNotBeEmpty();
         tags.ForEach(tag => newTags.Contains(tag.Name));
+    }
+
+    [Fact]
+    public async Task RemoveTagFromEntityAsync_Should_Not_Remove_Another_Entity_Types_Tag()
+    {
+        var tag = (await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1)).First();
+
+        await Should.ThrowAsync<EntityNotFoundException>(() => _entityTagManager.RemoveTagFromEntityAsync(
+            tag.Id, _cmsKitTestData.EntityType2, _cmsKitTestData.EntityId1));
+
+        var remainingTags = await _tagRepository.GetAllRelatedTagsAsync(_cmsKitTestData.EntityType1, _cmsKitTestData.EntityId1);
+        remainingTags.ShouldContain(x => x.Id == tag.Id);
     }
 
     [Fact]

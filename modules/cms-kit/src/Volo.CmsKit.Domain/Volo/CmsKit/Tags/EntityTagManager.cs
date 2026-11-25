@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Services;
 
 namespace Volo.CmsKit.Tags;
@@ -50,6 +51,12 @@ public class EntityTagManager : DomainService
         [CanBeNull] Guid? tenantId = null,
         CancellationToken cancellationToken = default)
     {
+        var tag = await TagRepository.GetAsync(tagId, cancellationToken: cancellationToken);
+        if (tag.EntityType != entityType)
+        {
+            throw new EntityNotFoundException(typeof(Tag), tagId);
+        }
+
         var entityTag = await EntityTagRepository.FindAsync(tagId, entityId, tenantId, cancellationToken);
         await EntityTagRepository.DeleteAsync(entityTag, cancellationToken: cancellationToken);
     }
