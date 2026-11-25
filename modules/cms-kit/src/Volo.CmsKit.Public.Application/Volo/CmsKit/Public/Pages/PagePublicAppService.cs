@@ -78,24 +78,21 @@ public class PagePublicAppService : CmsKitPublicAppServiceBase, IPagePublicAppSe
 
     internal virtual async Task<PageCacheItem> FindAndCacheBySlugAsync(string slug)
     {
-        var pageCacheItem = await PageCache.GetOrAddAsync(PageCacheItem.GetKey(slug), async () =>
+        var key = PageCacheItem.GetKey(slug);
+        var pageCacheItem = await PageCache.GetAsync(key);
+        if (pageCacheItem != null)
         {
-            var page = await PageRepository.FindBySlugAsync(slug);
-            // If page is not found, cache it as null to prevent further queries.
-            if (page is null)
-            {
-                return null;
-            }
+            return pageCacheItem;
+        }
 
-            // Only return published pages
-            if (page.Status != PageStatus.Publish)
-            {
-                return null;
-            }
+        var page = await PageRepository.FindBySlugAsync(slug);
+        if (page == null || page.Status != PageStatus.Publish)
+        {
+            return null;
+        }
 
-            return ObjectMapper.Map<Page, PageCacheItem>(page);
-        });
-
+        pageCacheItem = ObjectMapper.Map<Page, PageCacheItem>(page);
+        await PageCache.SetAsync(key, pageCacheItem);
         return pageCacheItem;
     }
 }
