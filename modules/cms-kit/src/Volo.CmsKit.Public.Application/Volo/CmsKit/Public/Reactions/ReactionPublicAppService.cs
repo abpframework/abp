@@ -7,6 +7,7 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Reactions;
@@ -15,7 +16,7 @@ namespace Volo.CmsKit.Public.Reactions;
 
 [RequiresFeature(CmsKitFeatures.ReactionEnable)]
 [RequiresGlobalFeature(typeof(ReactionsFeature))]
-public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPublicAppService
+public class ReactionPublicAppService : CmsKitBlogPostInteractionAppServiceBase, IReactionPublicAppService
 {
     protected IReactionDefinitionStore ReactionDefinitionStore { get; }
 
@@ -26,7 +27,10 @@ public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPub
     public ReactionPublicAppService(
         IReactionDefinitionStore reactionDefinitionStore,
         IUserReactionRepository userReactionRepository,
-        ReactionManager reactionManager)
+        ReactionManager reactionManager,
+        IBlogPostRepository blogPostRepository,
+        IBlogFeatureAppService blogFeatureAppService)
+        : base(blogPostRepository, blogFeatureAppService)
     {
         ReactionDefinitionStore = reactionDefinitionStore;
         UserReactionRepository = userReactionRepository;
@@ -68,6 +72,8 @@ public class ReactionPublicAppService : CmsKitPublicAppServiceBase, IReactionPub
     [Authorize]
     public virtual async Task CreateAsync(string entityType, string entityId, string reaction)
     {
+        await CheckBlogFeatureAsync(entityType, entityId, ReactionsFeature.Name);
+
         await ReactionManager.GetOrCreateAsync(
             CurrentUser.GetId(),
             entityType,

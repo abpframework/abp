@@ -14,6 +14,7 @@ using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.Users;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Comments;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
@@ -24,7 +25,7 @@ namespace Volo.CmsKit.Public.Comments;
 
 [RequiresFeature(CmsKitFeatures.CommentEnable)]
 [RequiresGlobalFeature(typeof(CommentsFeature))]
-public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPublicAppService
+public class CommentPublicAppService : CmsKitBlogPostInteractionAppServiceBase, ICommentPublicAppService
 {
     protected string RegexUrlPattern =
         @"https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_\+.~#?&\/\/=]*)";
@@ -43,8 +44,10 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
         IDistributedEventBus distributedEventBus,
         CommentManager commentManager,
         IOptionsSnapshot<CmsKitCommentOptions> cmsCommentOptions,
-        ISettingManager settingManager
-        )
+        ISettingManager settingManager,
+        IBlogPostRepository blogPostRepository,
+        IBlogFeatureAppService blogFeatureAppService)
+        : base(blogPostRepository, blogFeatureAppService)
     {
         CommentRepository = commentRepository;
         CmsUserLookupService = cmsUserLookupService;
@@ -71,6 +74,8 @@ public class CommentPublicAppService : CmsKitPublicAppServiceBase, ICommentPubli
     [Authorize]
     public virtual async Task<CommentDto> CreateAsync(string entityType, string entityId, CreateCommentInput input)
     {
+        await CheckBlogFeatureAsync(entityType, entityId, CommentsFeature.Name);
+
         CheckExternalUrls(entityType, input.Text);
 
         if (input.RepliedCommentId.HasValue)
