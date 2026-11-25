@@ -30,6 +30,11 @@ public class ClientProxyExceptionEventHandler : ILocalEventHandler<ClientProxyEx
                 var options = scope.ServiceProvider.GetRequiredService<IOptions<AbpAspNetCoreComponentsWebOptions>>();
                 if (!options.Value.IsBlazorWebApp)
                 {
+                    if (IsAccessTokenRevokedByClient(eventData.AccessTokenHash))
+                    {
+                        return;
+                    }
+
                     var authenticationOptions = scope.ServiceProvider.GetRequiredService<IOptions<AbpAuthenticationOptions>>();
                     var navigationManager = scope.ServiceProvider.GetRequiredService<NavigationManager>();
                     navigationManager.NavigateToLogout(authenticationOptions.Value.LogoutUrl, "/");
@@ -41,5 +46,14 @@ public class ClientProxyExceptionEventHandler : ILocalEventHandler<ClientProxyEx
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// A 401 for a token this client revoked itself after getting a newer one does not mean the user is signed out.
+    /// Any other 401, including one whose token cannot be identified, keeps signing out.
+    /// </summary>
+    protected virtual bool IsAccessTokenRevokedByClient(string? accessTokenHash)
+    {
+        return WebAssemblyRevokedAccessTokens.ContainsHash(accessTokenHash);
     }
 }
