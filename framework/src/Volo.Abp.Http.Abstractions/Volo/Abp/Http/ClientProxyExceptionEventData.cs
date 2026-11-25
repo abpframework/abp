@@ -11,4 +11,6 @@ public class ClientProxyExceptionEventData
     public string? ErrorDescription { get; set; }
 
     public string? ErrorUri { get; set; }
+
+    public string? AccessTokenHash { get; set; }
 }

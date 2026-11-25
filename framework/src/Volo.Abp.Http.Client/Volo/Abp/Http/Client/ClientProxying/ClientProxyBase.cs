@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
@@ -354,6 +355,24 @@ public class ClientProxyBase<TService> : ITransientDependency
             .GetConfigurationOrDefaultOrNullAsync(clientConfig.RemoteServiceName))?.Version;
     }
 
+    protected virtual string? GetAccessTokenHash(HttpResponseMessage response)
+    {
+        if (response.StatusCode != HttpStatusCode.Unauthorized)
+        {
+            return null;
+        }
+
+        var authorization = response.RequestMessage?.Headers.Authorization;
+        if (authorization == null ||
+            !string.Equals(authorization.Scheme, "Bearer", StringComparison.OrdinalIgnoreCase) ||
+            authorization.Parameter.IsNullOrWhiteSpace())
+        {
+            return null;
+        }
+
+        return authorization.Parameter.ToSha256();
+    }
+
     protected virtual async Task ThrowExceptionForResponseAsync(HttpResponseMessage response)
     {
         var wwwAuthenticate = response.Headers.WwwAuthenticate.ToString() ?? string.Empty;
@@ -371,6 +390,7 @@ public class ClientProxyBase<TService> : ITransientDependency
             Error = error,
             ErrorDescription = errorDescription,
             ErrorUri = errorUri,
+            AccessTokenHash = GetAccessTokenHash(response)
         });
 
         if (response.Headers.Contains(AbpHttpConsts.AbpErrorFormat))
