@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
@@ -130,10 +131,17 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
             return;
         }
 
-        var revoked = false;
-        var revokeAccessTokens = AccessTokens.Select(x => x.Value);
+        // Take the list before reading the current token: a token tracked after that point may be the newer one.
+        var trackedAccessTokens = AccessTokens.Values;
         var currentAccessToken = await FindAccessTokenAsync();
-        foreach (var accessToken in revokeAccessTokens)
+        if (currentAccessToken.IsNullOrWhiteSpace())
+        {
+            // Without the current token there is no way to tell which tracked token is still in use.
+            return;
+        }
+
+        var oldAccessTokens = new List<string>();
+        foreach (var accessToken in trackedAccessTokens)
         {
             if (accessToken == currentAccessToken)
             {
@@ -151,26 +159,47 @@ public class WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, 
                 }
             }
 
-            var httpClient = HttpClientFactory.CreateClient(nameof(WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, TAccount, TProviderOptions>));
-            var result = await httpClient.RevokeTokenAsync(new TokenRevocationRequest
-            {
-                Address = authority.EnsureEndsWith('/') + WebAssemblyAuthenticationStateProviderOptions.Value.TokenRevocationUrl,
-                ClientId = clientId,
-                Token = accessToken,
-            });
+            oldAccessTokens.Add(accessToken);
+        }
 
-            if (!result.IsError)
+        // Record every token before revoking any of them: revoking one can end the session of another tracked token,
+        // and a request that still uses it can get its 401 before the revocation returns.
+        // A token that is already recorded is being revoked by another call.
+        var revokeAccessTokens = oldAccessTokens.Where(WebAssemblyRevokedAccessTokens.TryAdd).ToList();
+
+        var revokedAccessTokens = new List<string>();
+        try
+        {
+            foreach (var accessToken in revokeAccessTokens)
             {
-                AccessTokens.TryRemove(accessToken, out _);
-                revoked = true;
+                var httpClient = HttpClientFactory.CreateClient(nameof(WebAssemblyAuthenticationStateProvider<TRemoteAuthenticationState, TAccount, TProviderOptions>));
+                var result = await httpClient.RevokeTokenAsync(new TokenRevocationRequest
+                {
+                    Address = authority.EnsureEndsWith('/') + WebAssemblyAuthenticationStateProviderOptions.Value.TokenRevocationUrl,
+                    ClientId = clientId,
+                    Token = accessToken,
+                });
+
+                if (!result.IsError)
+                {
+                    AccessTokens.TryRemove(accessToken, out _);
+                    revokedAccessTokens.Add(accessToken);
+                }
+                else
+                {
+                    Logger.LogError(result.Raw);
+                }
             }
-            else
+        }
+        finally
+        {
+            foreach (var accessToken in revokeAccessTokens.Except(revokedAccessTokens))
             {
-                Logger.LogError(result.Raw);
+                WebAssemblyRevokedAccessTokens.Remove(accessToken);
             }
         }
 
-        if (revoked)
+        if (revokedAccessTokens.Count > 0)
         {
             await WebAssemblyCachedApplicationConfigurationClient.InitializeAsync();
         }
