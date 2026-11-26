@@ -204,10 +204,12 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     private async Task CleanAndCopyResources(string fileDirectory)
     {
-        // Shallowest package first: when a package is installed more than once, the copy closest to the root wins.
+        // Fewest node_modules levels first: when a package is installed more than once, the copy closest to the root wins.
         var mappingFiles = Directory.GetFiles(fileDirectory, "abp.resourcemapping.js", SearchOption.AllDirectories)
             .Select(x => new { Path = x, Package = FindPackage(fileDirectory, x) })
-            .OrderBy(x => (x.Package?.Directory ?? Path.GetDirectoryName(x.Path)).Count(c => c == Path.DirectorySeparatorChar))
+            .Select(x => new { x.Path, x.Package, Directory = x.Package?.Directory ?? Path.GetDirectoryName(x.Path) })
+            .OrderBy(x => x.Directory.Split(Path.DirectorySeparatorChar).Count(s => s.Equals("node_modules", StringComparison.OrdinalIgnoreCase)))
+            .ThenBy(x => x.Directory, StringComparer.Ordinal)
             .ThenBy(x => x.Path, StringComparer.Ordinal)
             .ToArray();
         var directDependencies = ReadDirectDependencies(fileDirectory);
@@ -215,8 +217,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
         {
             Clean = new List<string> { LibsDirectory }
         };
-        var addedMappings = new HashSet<KeyValuePair<string, string>>();
-        var copyMappings = new List<KeyValuePair<string, string>>();
+        var declaredMappings = new List<(KeyValuePair<string, string> Mapping, string ResolveFromDirectory)>();
         var packageDirectories = new Dictionary<string, string>(StringComparer.Ordinal);
 
         foreach (var mappingFileInfo in mappingFiles)
@@ -256,28 +257,34 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                 {
                     resourceMapping.Aliases.AddIfNotContains(new KeyValuePair<string, string>(x.Key, x.Value));
                 });
-                foreach (var x in mapping.Mappings)
-                {
-                    // A mapping that several files declare is copied once, from the shallowest file that has files for it.
-                    if (addedMappings.Contains(x))
-                    {
-                        continue;
-                    }
-
-                    var resolvedPattern = ResolveDependencyPath(fileDirectory, resolveFromDirectory, directDependencies, x.Key);
-                    if (FindFiles(fileDirectory, resolvedPattern).Any())
-                    {
-                        addedMappings.Add(x);
-                    }
-
-                    copyMappings.AddIfNotContains(new KeyValuePair<string, string>(resolvedPattern, x.Value));
-                }
+                declaredMappings.AddRange(mapping.Mappings.Select(x => (x, resolveFromDirectory)));
             }
         }
 
         EnsureLibsFolderExists(fileDirectory, LibsDirectory);
 
         CleanDirsAndFiles(fileDirectory, resourceMapping);
+
+        // Resolved after cleaning, so a source file that the clean rules delete is not selected.
+        var addedMappings = new HashSet<KeyValuePair<string, string>>();
+        var copyMappings = new List<KeyValuePair<string, string>>();
+        foreach (var (mapping, resolveFromDirectory) in declaredMappings)
+        {
+            // A mapping that several files declare is copied once, from the shallowest file that has files for it.
+            if (addedMappings.Contains(mapping))
+            {
+                continue;
+            }
+
+            var resolvedPattern = ResolveDependencyPath(fileDirectory, resolveFromDirectory, directDependencies, mapping.Key);
+            if (FindFiles(fileDirectory, resolvedPattern).Any())
+            {
+                addedMappings.Add(mapping);
+            }
+
+            copyMappings.AddIfNotContains(new KeyValuePair<string, string>(resolvedPattern, mapping.Value));
+        }
+
         CopyResourcesToLibs(fileDirectory, copyMappings);
     }
 

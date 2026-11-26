@@ -156,6 +156,34 @@ public class InstallLibsService_Tests : AbpCliTestBase
     }
 
     [Fact]
+    public async Task Should_Copy_The_Root_Dependency_When_The_Clean_Rules_Delete_The_Nested_Copy()
+    {
+        using var project = CreateMvcProjectWithJQueryPack();
+        project.WriteFile("abp.resourcemapping.js",
+            "module.exports = { clean: [ \"@node_modules/@abp/jquery/node_modules/jquery/dist/jquery.js\" ], mappings: { } }");
+        project.WriteFile("node_modules/jquery/dist/jquery.js", "root");
+        project.WriteFile("node_modules/@abp/jquery/node_modules/jquery/dist/jquery.js", "nested");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/jquery/jquery.js").ShouldBe("root");
+    }
+
+    [Fact]
+    public async Task Should_Prefer_A_Scoped_Root_Package_Over_An_Unscoped_Root_Package()
+    {
+        using var project = CreateMvcProjectWithJQueryPack();
+        project.WriteFile("node_modules/zz-widget/abp.resourcemapping.js",
+            "module.exports = { mappings: { \"@node_modules/jquery/dist/jquery.js\": \"@libs/jquery/\" } }");
+        project.WriteFile("node_modules/jquery/dist/jquery.js", "root");
+        project.WriteFile("node_modules/@abp/jquery/node_modules/jquery/dist/jquery.js", "nested");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/jquery/jquery.js").ShouldBe("nested");
+    }
+
+    [Fact]
     public async Task Should_Copy_The_Root_Dependency_When_The_Nested_Copy_Has_No_Matching_File()
     {
         using var project = CreateMvcProjectWithJQueryPack();
