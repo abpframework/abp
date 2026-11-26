@@ -225,6 +225,7 @@
     <Project Path="test/Volo.Abp.Emailing.Tests/Volo.Abp.Emailing.Tests.csproj" />
     <Project Path="test/Volo.Abp.EntityFrameworkCore.Tests.SecondContext/Volo.Abp.EntityFrameworkCore.Tests.SecondContext.csproj" />
     <Project Path="test/Volo.Abp.EntityFrameworkCore.Tests/Volo.Abp.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.EventBus.Azure.Tests/Volo.Abp.EventBus.Azure.Tests.csproj" />
     <Project Path="test/Volo.Abp.EventBus.Tests/Volo.Abp.EventBus.Tests.csproj" />
     <Project Path="test/Volo.Abp.ExceptionHandling.Tests/Volo.Abp.ExceptionHandling.Tests.csproj" />
     <Project Path="test/Volo.Abp.Features.Tests/Volo.Abp.Features.Tests.csproj" />
