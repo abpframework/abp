@@ -7,6 +7,7 @@ using Microsoft.Extensions.FileSystemGlobbing;
 using Microsoft.Extensions.FileSystemGlobbing.Abstractions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Newtonsoft.Json.Linq;
 using Volo.Abp.Cli.Utils;
 using Volo.Abp.DependencyInjection;
 
@@ -208,13 +209,30 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
             .OrderBy(x => x.Count(c => c == Path.DirectorySeparatorChar))
             .ThenBy(x => x, StringComparer.Ordinal)
             .ToArray();
+        var directDependencies = ReadDirectDependencies(fileDirectory);
         var resourceMapping = new ResourceMapping
         {
             Clean = new List<string> { LibsDirectory }
         };
+        var addedMappings = new HashSet<KeyValuePair<string, string>>();
+        var copyMappings = new List<KeyValuePair<string, string>>();
+        var packageDirectories = new Dictionary<string, string>(StringComparer.Ordinal);
 
         foreach (var mappingFile in mappingFiles)
         {
+            var package = FindPackage(fileDirectory, mappingFile);
+            if (package != null)
+            {
+                // Only the copy closest to the root is used when a package is installed more than once.
+                if (packageDirectories.TryGetValue(package.Value.Name, out var packageDirectory) &&
+                    packageDirectory != package.Value.Directory)
+                {
+                    continue;
+                }
+
+                packageDirectories[package.Value.Name] = package.Value.Directory;
+            }
+
             using (var reader = File.OpenText(mappingFile))
             {
                 var mappingFileContent = await reader.ReadToEndAsync();
@@ -225,44 +243,112 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                     .Replace("=", string.Empty).Trim().TrimEnd(';'));
 
                 mapping.ReplaceAliases();
-                ResolveDependencyPaths(fileDirectory, Path.GetDirectoryName(mappingFile), mapping);
 
                 mapping.Clean.ForEach(c => resourceMapping.Clean.AddIfNotContains(c));
                 mapping.Aliases.ToList().ForEach(x =>
                 {
                     resourceMapping.Aliases.AddIfNotContains(new KeyValuePair<string, string>(x.Key, x.Value));
                 });
-                mapping.Mappings.ToList().ForEach(x =>
+                foreach (var x in mapping.Mappings)
                 {
-                    resourceMapping.Mappings.AddIfNotContains(new KeyValuePair<string, string>(x.Key, x.Value));
-                });
+                    // A mapping that several files declare is copied once, from the shallowest file that has files for it.
+                    if (addedMappings.Contains(x))
+                    {
+                        continue;
+                    }
+
+                    var resolvedPattern = ResolveDependencyPath(fileDirectory, package?.Directory, directDependencies, x.Key);
+                    if (FindFiles(fileDirectory, resolvedPattern).Any())
+                    {
+                        addedMappings.Add(x);
+                    }
+
+                    copyMappings.AddIfNotContains(new KeyValuePair<string, string>(resolvedPattern, x.Value));
+                }
             }
         }
 
         EnsureLibsFolderExists(fileDirectory, LibsDirectory);
 
         CleanDirsAndFiles(fileDirectory, resourceMapping);
-        CopyResourcesToLibs(fileDirectory, resourceMapping);
+        CopyResourcesToLibs(fileDirectory, copyMappings);
     }
 
-    private static void ResolveDependencyPaths(string projectDirectory, string packageDirectory, ResourceMapping mapping)
+    private HashSet<string> ReadDirectDependencies(string projectDirectory)
     {
-        mapping.Mappings = mapping.Mappings.ToDictionary(
-            x => ResolveDependencyPath(projectDirectory, packageDirectory, x.Key),
-            x => x.Value);
+        var dependencies = new HashSet<string>(StringComparer.Ordinal);
+        var packageJsonFilePath = Path.Combine(projectDirectory, "package.json");
+
+        try
+        {
+            var packageJson = JObject.Parse(File.ReadAllText(packageJsonFilePath));
+            foreach (var dependencyListName in new[] { "dependencies", "devDependencies", "optionalDependencies" })
+            {
+                if (packageJson[dependencyListName] is JObject dependencyList)
+                {
+                    foreach (var dependency in dependencyList.Properties())
+                    {
+                        dependencies.Add(dependency.Name);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Failed to parse package.json at {PackageJsonFilePath}", packageJsonFilePath);
+        }
+
+        return dependencies;
+    }
+
+    // Returns the npm package that contains the mapping file, or null for a mapping file of the project itself.
+    private static (string Name, string Directory)? FindPackage(string projectDirectory, string mappingFile)
+    {
+        var root = Path.GetFullPath(projectDirectory).TrimEnd(Path.DirectorySeparatorChar);
+        var segments = Path.GetFullPath(mappingFile).Substring(root.Length + 1).Split(Path.DirectorySeparatorChar);
+        var index = Array.FindLastIndex(segments, x => x.Equals("node_modules", StringComparison.OrdinalIgnoreCase));
+        if (index < 0)
+        {
+            return null;
+        }
+
+        var nameSegmentCount = segments[index + 1].StartsWith("@") ? 2 : 1;
+        if (index + nameSegmentCount >= segments.Length - 1)
+        {
+            return null;
+        }
+
+        var directorySegments = segments.Take(index + 1 + nameSegmentCount).ToList();
+        return (
+            string.Join("/", directorySegments.Skip(index + 1)),
+            Path.Combine(root, Path.Combine(directorySegments.ToArray())));
     }
 
     // When the root node_modules has another version of a package's dependency, the package manager nests the
-    // version the package needs under the package's own node_modules. Resolve it the way Node.js does.
-    private static string ResolveDependencyPath(string projectDirectory, string packageDirectory, string pattern)
+    // version the package needs under the package's own node_modules. Resolve it the way Node.js does, except for
+    // the direct dependencies of the project: their version in the root node_modules is the one the project chose.
+    // A nested copy that has no file for the pattern is skipped, so the root copy is used as before. The mapping
+    // files of the project itself (packageDirectory is null) keep using the root node_modules.
+    private string ResolveDependencyPath(string projectDirectory, string packageDirectory, HashSet<string> directDependencies, string pattern)
     {
         const string nodeModulesPrefix = "./node_modules/";
-        if (!pattern.StartsWith(nodeModulesPrefix))
+        if (packageDirectory == null)
         {
             return pattern;
         }
 
-        var path = pattern.Substring(nodeModulesPrefix.Length);
+        var normalizedPattern = pattern.Replace('\\', '/');
+        if (normalizedPattern.StartsWith("node_modules/"))
+        {
+            normalizedPattern = "./" + normalizedPattern;
+        }
+
+        if (!normalizedPattern.StartsWith(nodeModulesPrefix))
+        {
+            return pattern;
+        }
+
+        var path = normalizedPattern.Substring(nodeModulesPrefix.Length);
         var segments = path.Split('/');
         var nameSegmentCount = segments[0].StartsWith("@") ? 2 : 1;
         if (segments.Length < nameSegmentCount || segments.Take(nameSegmentCount).Any(x => x.Contains("*")))
@@ -272,6 +358,11 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
         var packageName = string.Join("/", segments.Take(nameSegmentCount));
         var root = Path.GetFullPath(projectDirectory).TrimEnd(Path.DirectorySeparatorChar);
+        if (directDependencies.Contains(packageName) && Directory.Exists(Path.Combine(root, "node_modules", packageName)))
+        {
+            return pattern;
+        }
+
         var directory = Path.GetFullPath(packageDirectory).TrimEnd(Path.DirectorySeparatorChar);
 
         while (directory != null &&
@@ -282,7 +373,11 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                 Directory.Exists(Path.Combine(directory, "node_modules", packageName)))
             {
                 var relativeDirectory = directory.Substring(root.Length + 1).Replace('\\', '/');
-                return $"./{relativeDirectory}/node_modules/{path}";
+                var resolvedPattern = $"./{relativeDirectory}/node_modules/{path}";
+                if (FindFiles(projectDirectory, resolvedPattern).Any())
+                {
+                    return resolvedPattern;
+                }
             }
 
             directory = Path.GetDirectoryName(directory);
@@ -296,9 +391,9 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
         Directory.CreateDirectory(Path.Combine(fileDirectory, libsDirectory));
     }
 
-    private void CopyResourcesToLibs(string fileDirectory, ResourceMapping resourceMapping)
+    private void CopyResourcesToLibs(string fileDirectory, List<KeyValuePair<string, string>> mappings)
     {
-        foreach (var mapping in resourceMapping.Mappings)
+        foreach (var mapping in mappings)
         {
             var destPath = Path.Combine(fileDirectory, mapping.Value);
             var files = FindFiles(fileDirectory, mapping.Key);

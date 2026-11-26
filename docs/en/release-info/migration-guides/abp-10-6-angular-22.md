@@ -69,7 +69,7 @@ Common symptoms include:
 - Modal busy states not clearing
 - Lists or charts not refreshing after asynchronous operations
 
-ABP 10.6 also changed the layout components that host your pages (`DynamicLayoutComponent` and the Basic Theme layouts) to `ChangeDetectionStrategy.OnPush`. A routed page is checked only when it is marked for check, so state assigned inside a `subscribe` callback is not rendered.
+ABP 10.6 also changed the layout components that host your pages (`DynamicLayoutComponent` and the Basic Theme layouts) to `ChangeDetectionStrategy.OnPush`. Angular skips the routed page below such a layout until the layout is marked for check, so state that is only assigned inside a `subscribe` callback may not be rendered.
 
 Recommended approaches:
 
