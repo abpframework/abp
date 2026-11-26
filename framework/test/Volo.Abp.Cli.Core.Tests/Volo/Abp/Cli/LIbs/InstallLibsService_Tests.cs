@@ -122,6 +122,40 @@ public class InstallLibsService_Tests : AbpCliTestBase
     }
 
     [Fact]
+    public async Task Should_Copy_A_Mapping_That_Only_Another_Copy_Of_A_Package_Declares_From_The_Root()
+    {
+        using var project = new TemporaryJavaScriptProject("{ \"dependencies\": { \"@abp/widget\": \"1.0.0\" } }");
+        project.WriteFile("MyProject.Web.csproj", "<Project Sdk=\"Microsoft.NET.Sdk.Web\"></Project>");
+        project.WriteFile("node_modules/@abp/widget/abp.resourcemapping.js",
+            "module.exports = { mappings: { \"@node_modules/widget/dist/main.js\": \"@libs/widget/\" } }");
+        project.WriteFile("node_modules/a-package/node_modules/@abp/widget/abp.resourcemapping.js",
+            "module.exports = { mappings: { \"@node_modules/widget/dist/main.css\": \"@libs/widget/\" } }");
+        project.WriteFile("node_modules/widget/dist/main.js", "js");
+        project.WriteFile("node_modules/widget/dist/main.css", "css");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/widget/main.js").ShouldBe("js");
+        project.ReadFile("wwwroot/libs/widget/main.css").ShouldBe("css");
+    }
+
+    [Fact]
+    public async Task Should_Prefer_The_Root_Copy_Of_A_Package_Whose_Mapping_File_Is_In_A_Subfolder()
+    {
+        const string mappingFile = "module.exports = { mappings: { \"@node_modules/dep/dist/dep.js\": \"@libs/dep/\" } }";
+        using var project = new TemporaryJavaScriptProject("{ \"dependencies\": { \"@scope/widget\": \"1.0.0\" } }");
+        project.WriteFile("MyProject.Web.csproj", "<Project Sdk=\"Microsoft.NET.Sdk.Web\"></Project>");
+        project.WriteFile("node_modules/@scope/widget/config/browser/release/abp.resourcemapping.js", mappingFile);
+        project.WriteFile("node_modules/@scope/widget/node_modules/dep/dist/dep.js", "root package");
+        project.WriteFile("node_modules/a/node_modules/@scope/widget/abp.resourcemapping.js", mappingFile);
+        project.WriteFile("node_modules/a/node_modules/@scope/widget/node_modules/dep/dist/dep.js", "nested package");
+
+        await GetRequiredService<IInstallLibsService>().InstallLibsAsync(project.Directory);
+
+        project.ReadFile("wwwroot/libs/dep/dep.js").ShouldBe("root package");
+    }
+
+    [Fact]
     public async Task Should_Copy_The_Root_Dependency_When_The_Nested_Copy_Has_No_Matching_File()
     {
         using var project = CreateMvcProjectWithJQueryPack();
@@ -194,7 +228,7 @@ public class InstallLibsService_Tests : AbpCliTestBase
     }
 
     [Fact]
-    public async Task Should_Use_Only_The_Mappings_Of_The_Root_Copy_When_A_Package_Is_Installed_More_Than_Once()
+    public async Task Should_Not_Copy_The_Nested_Dependencies_Of_Another_Copy_Of_A_Package()
     {
         using var project = new TemporaryJavaScriptProject("{ \"dependencies\": { \"@abp/jquery\": \"~9.3.7\" } }");
         project.WriteFile("MyProject.Web.csproj", "<Project Sdk=\"Microsoft.NET.Sdk.Web\"></Project>");

@@ -204,10 +204,11 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
 
     private async Task CleanAndCopyResources(string fileDirectory)
     {
-        // Shallowest first: when a package is installed more than once, the copy closest to the root wins.
+        // Shallowest package first: when a package is installed more than once, the copy closest to the root wins.
         var mappingFiles = Directory.GetFiles(fileDirectory, "abp.resourcemapping.js", SearchOption.AllDirectories)
-            .OrderBy(x => x.Count(c => c == Path.DirectorySeparatorChar))
-            .ThenBy(x => x, StringComparer.Ordinal)
+            .Select(x => new { Path = x, Package = FindPackage(fileDirectory, x) })
+            .OrderBy(x => (x.Package?.Directory ?? Path.GetDirectoryName(x.Path)).Count(c => c == Path.DirectorySeparatorChar))
+            .ThenBy(x => x.Path, StringComparer.Ordinal)
             .ToArray();
         var directDependencies = ReadDirectDependencies(fileDirectory);
         var resourceMapping = new ResourceMapping
@@ -218,19 +219,25 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
         var copyMappings = new List<KeyValuePair<string, string>>();
         var packageDirectories = new Dictionary<string, string>(StringComparer.Ordinal);
 
-        foreach (var mappingFile in mappingFiles)
+        foreach (var mappingFileInfo in mappingFiles)
         {
-            var package = FindPackage(fileDirectory, mappingFile);
+            var mappingFile = mappingFileInfo.Path;
+            var package = mappingFileInfo.Package;
+            string resolveFromDirectory = null;
             if (package != null)
             {
-                // Only the copy closest to the root is used when a package is installed more than once.
-                if (packageDirectories.TryGetValue(package.Value.Name, out var packageDirectory) &&
-                    packageDirectory != package.Value.Directory)
+                // Only the copy closest to the root resolves its nested dependencies. The other copies of the
+                // package use the root node_modules as before, so their files are not mixed with the nested ones.
+                if (!packageDirectories.TryGetValue(package.Value.Name, out var packageDirectory))
                 {
-                    continue;
+                    packageDirectory = package.Value.Directory;
+                    packageDirectories[package.Value.Name] = packageDirectory;
                 }
 
-                packageDirectories[package.Value.Name] = package.Value.Directory;
+                if (packageDirectory == package.Value.Directory)
+                {
+                    resolveFromDirectory = packageDirectory;
+                }
             }
 
             using (var reader = File.OpenText(mappingFile))
@@ -257,7 +264,7 @@ public class InstallLibsService : IInstallLibsService, ITransientDependency
                         continue;
                     }
 
-                    var resolvedPattern = ResolveDependencyPath(fileDirectory, package?.Directory, directDependencies, x.Key);
+                    var resolvedPattern = ResolveDependencyPath(fileDirectory, resolveFromDirectory, directDependencies, x.Key);
                     if (FindFiles(fileDirectory, resolvedPattern).Any())
                     {
                         addedMappings.Add(x);
