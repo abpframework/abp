@@ -69,12 +69,27 @@ Common symptoms include:
 - Modal busy states not clearing
 - Lists or charts not refreshing after asynchronous operations
 
+ABP 10.6 also changed the layout components that host your pages (`DynamicLayoutComponent` and the Basic Theme layouts) to `ChangeDetectionStrategy.OnPush`. Angular skips the routed page below such a layout until the layout is marked for check, so state that is only assigned inside a `subscribe` callback may not be rendered.
+
 Recommended approaches:
 
 1. Use `signal()` for component state.
 2. Use `toSignal()` when consuming observable streams.
 3. Use the `async` pipe for observable-based UI state.
-4. Use `ChangeDetectionStrategy.Eager` only as a temporary compatibility measure for legacy components.
+4. As a temporary measure for legacy components, call `ChangeDetectorRef.markForCheck()` after updating state in a subscription:
+
+```typescript
+private readonly cdr = inject(ChangeDetectorRef);
+
+ngOnInit() {
+  this.list.hookToQuery(query => this.bookService.getList(query)).subscribe(response => {
+    this.book = response;
+    this.cdr.markForCheck();
+  });
+}
+```
+
+> Setting `ChangeDetectionStrategy.Eager` on the page component (for example with the `change-detection-eager` migration of `ng update`) or calling `provideZoneChangeDetection()` does not fix these symptoms, because the OnPush layout above the page is not checked.
 
 ### 4.3 ABP List Pages (`ListService`)
 

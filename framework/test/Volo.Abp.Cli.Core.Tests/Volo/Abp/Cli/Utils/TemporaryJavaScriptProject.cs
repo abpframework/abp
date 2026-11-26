@@ -25,6 +25,18 @@ public sealed class TemporaryJavaScriptProject : IDisposable
         }
     }
 
+    public void WriteFile(string relativePath, string content)
+    {
+        var path = Path.Combine(Directory, relativePath);
+        System.IO.Directory.CreateDirectory(Path.GetDirectoryName(path));
+        File.WriteAllText(path, content);
+    }
+
+    public string ReadFile(string relativePath)
+    {
+        return File.ReadAllText(Path.Combine(Directory, relativePath));
+    }
+
     public void Dispose()
     {
         System.IO.Directory.Delete(Directory, true);
