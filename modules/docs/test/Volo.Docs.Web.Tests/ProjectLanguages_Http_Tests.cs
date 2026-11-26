@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -44,18 +45,40 @@ public class ProjectLanguages_Http_Tests : AbpWebApplicationFactoryIntegratedTes
     }
 
     [Fact]
-    public async Task Should_Not_Cache_Transient_Fallback_For_A_Valid_Version()
+    public async Task Should_Cache_Fallback_For_A_Valid_Version_Only_Briefly()
     {
         var state = ServiceProvider.GetRequiredService<DocsGithubTestState>();
+        var cache = ServiceProvider.GetRequiredService<RecordingDistributedCache>();
         state.FailLanguageDownloads = true;
         var fallback = await Client.GetFromJsonAsync<LanguageConfig>("/api/docs/projects/abp/2.0.0/languageList");
         fallback!.Languages.Count.ShouldBe(1);
+        (await Client.GetFromJsonAsync<LanguageConfig>("/api/docs/projects/abp/2.0.0/languageList"))!.Languages.Count.ShouldBe(1);
+        state.LanguageDownloads.ShouldBe(1);
+
+        var key = cache.Writes.Single(x => x.Contains(nameof(LanguageConfig)));
+        cache.WriteOptions[key].AbsoluteExpirationRelativeToNow.ShouldBe(TimeSpan.FromMinutes(1));
         state.FailLanguageDownloads = false;
+        await cache.RemoveAsync(key);
 
         var recovered = await Client.GetFromJsonAsync<LanguageConfig>("/api/docs/projects/abp/2.0.0/languageList");
 
         recovered!.Languages.ShouldContain(x => x.Code == "tr");
         state.LanguageDownloads.ShouldBe(2);
+    }
+
+    [Fact]
+    public async Task Should_Cache_Languages_Of_A_Project_Without_Versions()
+    {
+        var projects = ServiceProvider.GetRequiredService<IProjectRepository>();
+        var project = await projects.GetByShortNameAsync("product");
+        project.LatestVersionBranchName = null;
+        await projects.UpdateAsync(project, true);
+        var cache = ServiceProvider.GetRequiredService<RecordingDistributedCache>();
+
+        (await Client.GetFromJsonAsync<LanguageConfig>("/api/docs/projects/product/latest/languageList"))!.Languages.ShouldNotBeEmpty();
+        (await Client.GetFromJsonAsync<LanguageConfig>("/api/docs/projects/product/latest/languageList"))!.Languages.ShouldNotBeEmpty();
+
+        cache.Writes.Count(x => x.Contains(nameof(LanguageConfig))).ShouldBe(1);
     }
     [Fact]
     public async Task Should_Cache_Successful_Known_Version_Languages()

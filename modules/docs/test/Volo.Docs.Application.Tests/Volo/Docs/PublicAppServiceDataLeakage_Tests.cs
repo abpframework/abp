@@ -20,6 +20,7 @@ using Volo.Docs.Common.Projects;
 using Volo.Docs.Documents;
 using Volo.Docs.Documents.FullSearch.Elastic;
 using Volo.Docs.GitHub.Documents;
+using Volo.Docs.GitHub.Documents.Version;
 using Volo.Docs.Projects;
 using Volo.Docs.Projects.Pdf;
 using Xunit;
@@ -110,6 +111,8 @@ namespace Volo.Docs
             var testData = GetRequiredService<DocsTestData>();
             var repository = GetRequiredService<IProjectRepository>();
             var github = GetRequiredService<IGithubRepositoryManager>();
+            github.GetVersionsAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>(), Arg.Any<GithubVersionProviderSource>())
+                .Returns(new List<GithubVersion> { new() { Name = "2.0.0" } });
             github.GetFileRawStringContentAsync(Arg.Any<string>(), Arg.Any<string>(), Arg.Any<string>())
                 .Returns(call =>
                 {

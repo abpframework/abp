@@ -8,10 +8,10 @@ using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
-using Volo.Docs.GitHub.Documents.Version;
 using Volo.Abp.Threading;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents;
+using Volo.Docs.GitHub.Documents.Version;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Common.Projects
@@ -140,8 +140,10 @@ namespace Volo.Docs.Common.Projects
                 ? defaultVersion
                 : version) ?? string.Empty);
 
+            // A source without versions and without a default branch serves one language list for the whole project.
             var isKnownVersion = (!defaultVersion.IsNullOrWhiteSpace() && version == project.GetFullVersion(defaultVersion)) ||
-                                 versions.Any(x => project.GetFullVersion(x.Name) == version);
+                                 versions.Any(x => project.GetFullVersion(x.Name) == version) ||
+                                 (!versions.Any() && defaultVersion.IsNullOrWhiteSpace() && version.IsNullOrEmpty());
             var key = await ProjectLanguageCacheKeyProvider.GetKeyAsync(project, version);
             if (key != null)
             {
@@ -159,11 +161,12 @@ namespace Volo.Docs.Common.Projects
 
             var languages = await store.GetLanguageListAsync(project, version);
             // Unlisted labels may be readable, but must not create language cache entries.
-            if (isKnownVersion && key != null && languages is not FallbackLanguageConfig)
+            if (isKnownVersion && key != null)
             {
                 await LanguageCache.SetAsync(key, languages, new DistributedCacheEntryOptions
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+                    // A fallback comes from a failed read, keep it briefly so the source is retried soon without being called on every request.
+                    AbsoluteExpirationRelativeToNow = languages is FallbackLanguageConfig ? TimeSpan.FromMinutes(1) : TimeSpan.FromHours(24)
                 });
             }
 

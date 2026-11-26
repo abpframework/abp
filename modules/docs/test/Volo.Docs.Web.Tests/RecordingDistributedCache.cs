@@ -11,6 +11,7 @@ public sealed class RecordingDistributedCache : IDistributedCache
 {
     private readonly MemoryDistributedCache _inner = new(Options.Create(new MemoryDistributedCacheOptions()));
     public ConcurrentQueue<string> Writes { get; } = new();
+    public ConcurrentDictionary<string, DistributedCacheEntryOptions> WriteOptions { get; } = new();
 
     public byte[] Get(string key) => _inner.Get(key);
     public Task<byte[]> GetAsync(string key, CancellationToken token = default) => _inner.GetAsync(key, token);
@@ -22,12 +23,14 @@ public sealed class RecordingDistributedCache : IDistributedCache
     public void Set(string key, byte[] value, DistributedCacheEntryOptions options)
     {
         Writes.Enqueue(key);
+        WriteOptions[key] = options;
         _inner.Set(key, value, options);
     }
 
     public Task SetAsync(string key, byte[] value, DistributedCacheEntryOptions options, CancellationToken token = default)
     {
         Writes.Enqueue(key);
+        WriteOptions[key] = options;
         return _inner.SetAsync(key, value, options, token);
     }
 
