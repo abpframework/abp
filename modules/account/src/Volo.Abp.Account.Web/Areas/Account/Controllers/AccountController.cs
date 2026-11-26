@@ -78,11 +78,14 @@ public class AccountController : AbpControllerBase
 
         if (signInResult.Succeeded)
         {
-            var user = await UserManager.FindByNameAsync(login.UserNameOrEmailAddress);
+            var user = await UserManager.FindSharedUserByNameAsync(login.UserNameOrEmailAddress);
             if (user != null)
             {
-                // Clear the dynamic claims cache.
-                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+                // Clear the dynamic claims cache. A shared user's cache entry belongs to the user's tenant.
+                using (CurrentTenant.Change(user.TenantId))
+                {
+                    await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+                }
             }
         }
 
@@ -196,6 +199,7 @@ public class AccountController : AbpControllerBase
 
     protected virtual async Task CheckLocalLoginAsync()
     {
+        // Use the login entry point's settings because a shared identity can belong to multiple tenants.
         if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
         {
             throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);

@@ -1,10 +1,17 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Volo.Abp.Account.Web.Areas.Account.Controllers;
+using Volo.Abp.Account.Web.Areas.Account.Controllers.Models;
+using Volo.Abp.Caching;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Security.Claims;
 using Volo.Abp.Uow;
 using Xunit;
 
@@ -73,6 +80,66 @@ public abstract class Login_NotAllowedUser_TestBase<TStartupModule> : AbpAccount
         var user = await CreateUserAsync(UserTenantId, RestrictedUserState.MustChangePassword, RestrictedUserState.RequiresConfirmation);
 
         (await LoginAsync(user.UserName, TestExternalLoginProvider.Password)).ShouldBe(new[] { L("LoginIsNotAllowed") });
+    }
+
+    [Fact]
+    public async Task Should_Sign_In_User_Without_Restrictions()
+    {
+        var user = await CreateUserAsync(UserTenantId);
+        await CacheDynamicClaimsAsync(user);
+
+        using var scope = ServiceProvider.CreateScope();
+        var page = CreatePage<LoginModel>(scope.ServiceProvider);
+        page.LoginInput = new LoginModel.LoginInputModel { UserNameOrEmailAddress = user.UserName, Password = Password };
+
+        using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            await page.OnPostAsync("Login");
+            await uow.CompleteAsync();
+        }
+
+        IsSignedIn().ShouldBeTrue();
+        (await GetCachedDynamicClaimsAsync(user)).ShouldBeNull();
+    }
+
+    [Fact]
+    public async Task Api_Should_Sign_In_User_Without_Restrictions()
+    {
+        var user = await CreateUserAsync(UserTenantId);
+        await CacheDynamicClaimsAsync(user);
+
+        using var scope = ServiceProvider.CreateScope();
+        var httpContext = CreatePage<LoginModel>(scope.ServiceProvider).HttpContext;
+        var controller = scope.ServiceProvider.GetRequiredService<AccountController>();
+        controller.ControllerContext = new ControllerContext(new ActionContext(httpContext, new RouteData(), new ControllerActionDescriptor()));
+
+        AbpLoginResult result;
+        using (var uow = GetRequiredService<IUnitOfWorkManager>().Begin())
+        {
+            result = await controller.Login(new UserLoginInfo { UserNameOrEmailAddress = user.UserName, Password = Password });
+            await uow.CompleteAsync();
+        }
+
+        result.Result.ShouldBe(LoginResultType.Success);
+        (await GetCachedDynamicClaimsAsync(user)).ShouldBeNull();
+    }
+
+    private async Task CacheDynamicClaimsAsync(IdentityUser user)
+    {
+        using (GetRequiredService<ICurrentTenant>().Change(user.TenantId))
+        {
+            await GetRequiredService<IDistributedCache<AbpDynamicClaimCacheItem>>()
+                .SetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId), new AbpDynamicClaimCacheItem());
+        }
+    }
+
+    private async Task<AbpDynamicClaimCacheItem> GetCachedDynamicClaimsAsync(IdentityUser user)
+    {
+        using (GetRequiredService<ICurrentTenant>().Change(user.TenantId))
+        {
+            return await GetRequiredService<IDistributedCache<AbpDynamicClaimCacheItem>>()
+                .GetAsync(AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId));
+        }
     }
 
     private async Task<string[]> LoginAsync(string userName, string password)

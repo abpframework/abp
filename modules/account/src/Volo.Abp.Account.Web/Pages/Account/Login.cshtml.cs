@@ -185,13 +185,16 @@ public class LoginModel : AccountPageModel
         }
 
         //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-        var user = await UserManager.FindByNameAsync(LoginInput.UserNameOrEmailAddress) ??
-                   await UserManager.FindByEmailAsync(LoginInput.UserNameOrEmailAddress);
+        var user = await UserManager.FindSharedUserByNameAsync(LoginInput.UserNameOrEmailAddress) ??
+                   await UserManager.FindSharedUserByEmailAsync(LoginInput.UserNameOrEmailAddress);
 
         Debug.Assert(user != null, nameof(user) + " != null");
 
-        // Clear the dynamic claims cache.
-        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+        // Clear the dynamic claims cache. A shared user's cache entry belongs to the user's tenant.
+        using (CurrentTenant.Change(user.TenantId))
+        {
+            await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+        }
 
         return await RedirectSafelyAsync(ReturnUrl, ReturnUrlHash);
     }
@@ -396,6 +399,7 @@ public class LoginModel : AccountPageModel
 
     protected virtual async Task CheckLocalLoginAsync()
     {
+        // Use the login entry point's settings because a shared identity can belong to multiple tenants.
         if (!await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin))
         {
             throw new UserFriendlyException(L["LocalLoginDisabledMessage"]);
