@@ -494,6 +494,43 @@ public class IdentityUserManager : UserManager<IdentityUser>, IDomainService
         return result;
     }
 
+    public override async Task<IdentityResult> ChangeEmailAsync(IdentityUser user, string newEmail, string token)
+    {
+        Check.NotNull(user, nameof(user));
+
+        // The base method changes these before it validates the user. Put them back when it fails,
+        // so a unit of work that saves the user later does not save a half changed email.
+        var email = user.Email;
+        var normalizedEmail = user.NormalizedEmail;
+        var emailConfirmed = user.EmailConfirmed;
+        var securityStamp = user.SecurityStamp;
+
+        IdentityResult result;
+        try
+        {
+            result = await base.ChangeEmailAsync(user, newEmail, token);
+        }
+        catch
+        {
+            RestoreEmail();
+            throw;
+        }
+
+        if (!result.Succeeded)
+        {
+            RestoreEmail();
+        }
+
+        return result;
+
+        void RestoreEmail()
+        {
+            user.SetEmailWithoutValidation(email, normalizedEmail);
+            user.SetEmailConfirmed(emailConfirmed);
+            user.SecurityStamp = securityStamp;
+        }
+    }
+
     public async override Task<IdentityResult> SetUserNameAsync(IdentityUser user, string userName)
     {
         var oldUserName = user.UserName;
