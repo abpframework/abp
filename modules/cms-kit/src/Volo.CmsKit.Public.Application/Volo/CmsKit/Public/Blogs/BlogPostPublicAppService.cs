@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.Abp.Validation;
 using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Contents;
 using Volo.CmsKit.Features;
@@ -21,6 +24,15 @@ namespace Volo.CmsKit.Public.Blogs;
 [RequiresGlobalFeature(typeof(BlogsFeature))]
 public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPublicAppService
 {
+    // Sorting is applied to the entities, so only fields returned by the public DTOs are allowed.
+    protected static readonly string[] BlogPostSortingFields =
+    {
+        "Title", "Slug", "ShortDescription", "CreationTime", "LastModificationTime",
+        "Author.UserName", "Author.Name", "Author.Surname"
+    };
+
+    protected static readonly string[] AuthorSortingFields = { "Id", "UserName", "Name", "Surname" };
+
     protected IBlogRepository BlogRepository { get; }
 
     protected IBlogPostRepository BlogPostRepository { get; }
@@ -46,12 +58,17 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
         var blogPost = await BlogPostRepository.GetBySlugAsync(blog.Id, blogPostSlug);
+        if (blogPost.Status != BlogPostStatus.Published)
+        {
+            throw new EntityNotFoundException(typeof(BlogPost), blogPost.Id);
+        }
 
         return ObjectMapper.Map<BlogPost, BlogPostCommonDto>(blogPost);
     }
 
     public virtual async Task<PagedResultDto<BlogPostCommonDto>> GetListAsync([NotNull] string blogSlug, BlogPostGetListInput input)
     {
+        CheckSorting(input.Sorting, BlogPostSortingFields);
         var blog = await BlogRepository.GetBySlugAsync(blogSlug);
 
         Guid? favoriteUserId = await GetFavoriteUserIdAsync(input.FilterOnFavorites);
@@ -74,6 +91,7 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
 
     public virtual async Task<PagedResultDto<CmsUserDto>> GetAuthorsHasBlogPostsAsync(BlogPostFilteredPagedAndSortedResultRequestDto input)
     {
+        CheckSorting(input.Sorting, AuthorSortingFields);
         var authors = await BlogPostRepository.GetAuthorsHasBlogPostsAsync(input.SkipCount, input.MaxResultCount, input.Sorting, input.Filter);
         var authorDtos = ObjectMapper.Map<List<CmsUser>, List<CmsUserDto>>(authors);
 

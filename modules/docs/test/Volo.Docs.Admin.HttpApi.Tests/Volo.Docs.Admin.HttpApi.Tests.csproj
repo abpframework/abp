@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <ProjectReference Include="../../src/Volo.Docs.Admin.HttpApi.Client/Volo.Docs.Admin.HttpApi.Client.csproj" />
+    <ProjectReference Include="../../src/Volo.Docs.Admin.HttpApi/Volo.Docs.Admin.HttpApi.csproj" />
+    <ProjectReference Include="../../../../framework/src/Volo.Abp.AspNetCore.TestBase/Volo.Abp.AspNetCore.TestBase.csproj" />
+    <ProjectReference Include="../../../../framework/test/AbpTestBase/AbpTestBase.csproj" />
+  </ItemGroup>
+</Project>

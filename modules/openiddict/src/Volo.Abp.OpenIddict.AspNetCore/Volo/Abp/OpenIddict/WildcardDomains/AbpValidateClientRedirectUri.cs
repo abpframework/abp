@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 
@@ -16,18 +15,17 @@ public class AbpValidateClientRedirectUri : AbpOpenIddictWildcardDomainBase<AbpV
             .Build();
 
     public AbpValidateClientRedirectUri(
-        IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
-        IOpenIddictApplicationManager applicationManager)
-        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri(applicationManager))
+        IOpenIddictApplicationManager applicationManager,
+        AbpOpenIddictWildcardDomainValidator wildcardDomainValidator)
+        : base(new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri(applicationManager), wildcardDomainValidator)
     {
-        OriginalHandler = new OpenIddictServerHandlers.Authentication.ValidateClientRedirectUri(applicationManager);
     }
 
     public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateAuthorizationRequestContext context)
     {
         Check.NotNull(context, nameof(context));
 
-        if (!string.IsNullOrEmpty(context.RedirectUri) && await CheckWildcardDomainAsync(context.RedirectUri))
+        if (!string.IsNullOrEmpty(context.RedirectUri) && await WildcardDomainValidator.IsValidAsync(context.RedirectUri, context.ClientId))
         {
             return;
         }

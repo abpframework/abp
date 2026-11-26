@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.MarkedItems;
 using Volo.CmsKit.Features;
@@ -11,7 +12,7 @@ using Volo.Abp.Features;
 namespace Volo.CmsKit.Public.MarkedItems;
 [RequiresFeature(CmsKitFeatures.MarkedItemEnable)]
 [RequiresGlobalFeature(typeof(MarkedItemsFeature))]
-public class MarkedItemPublicAppService : CmsKitPublicAppServiceBase, IMarkedItemPublicAppService
+public class MarkedItemPublicAppService : CmsKitBlogPostInteractionAppServiceBase, IMarkedItemPublicAppService
 {
     protected IMarkedItemDefinitionStore MarkedItemDefinitionStore { get; }
 
@@ -22,7 +23,10 @@ public class MarkedItemPublicAppService : CmsKitPublicAppServiceBase, IMarkedIte
     public MarkedItemPublicAppService(
         IMarkedItemDefinitionStore markedItemDefinitionStore,
         IUserMarkedItemRepository userMarkedItemRepository,
-        MarkedItemManager markedItemManager)
+        MarkedItemManager markedItemManager,
+        IBlogPostRepository blogPostRepository,
+        IBlogFeatureAppService blogFeatureAppService)
+        : base(blogPostRepository, blogFeatureAppService)
     {
         MarkedItemDefinitionStore = markedItemDefinitionStore;
         UserMarkedItemRepository = userMarkedItemRepository;
@@ -53,6 +57,8 @@ public class MarkedItemPublicAppService : CmsKitPublicAppServiceBase, IMarkedIte
     [Authorize]
     public virtual async Task<bool> ToggleAsync(string entityType, string entityId)
     {
+        await CheckBlogFeatureAsync(entityType, entityId, MarkedItemsFeature.Name);
+
         return await MarkedItemManager.ToggleUserMarkedItemAsync(
             CurrentUser.GetId(),
             entityType,

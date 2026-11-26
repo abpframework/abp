@@ -29,6 +29,8 @@ public class UpdateModel : CmsKitAdminPageModel
 
     public virtual BlogFeatureDto TagsFeature { get; protected set; }
 
+    public virtual Guid BlogId { get; protected set; }
+
     public UpdateModel(
         IBlogPostAdminAppService blogPostAdminAppService,
         IBlogFeatureAppService blogFeatureAppService)
@@ -40,6 +42,8 @@ public class UpdateModel : CmsKitAdminPageModel
     public virtual async Task OnGetAsync()
     {
         var blogPost = await BlogPostAdminAppService.GetAsync(Id);
+
+        BlogId = blogPost.BlogId;
 
         ViewModel = ObjectMapper.Map<BlogPostDto, UpdateBlogPostViewModel>(blogPost);
 

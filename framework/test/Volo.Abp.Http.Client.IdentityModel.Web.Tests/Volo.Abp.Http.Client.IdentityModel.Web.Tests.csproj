@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\src\Volo.Abp.Http.Client.IdentityModel.Web\Volo.Abp.Http.Client.IdentityModel.Web.csproj" />
     <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" />
   </ItemGroup>
 
 </Project>

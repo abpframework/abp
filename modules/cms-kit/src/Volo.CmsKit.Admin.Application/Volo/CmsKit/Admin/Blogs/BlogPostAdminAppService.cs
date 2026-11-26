@@ -32,6 +32,12 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
 
     protected IMediaDescriptorAdminAppService MediaDescriptorAdminAppService { get; }
 
+    // Sorting is applied to the entities, so only blog post fields returned by the DTO are allowed.
+    protected static readonly string[] BlogPostSortingFields =
+    {
+        "Id", "BlogId", "Title", "Slug", "ShortDescription", "Content", "CoverImageMediaId", "CreationTime", "LastModificationTime", "Status"
+    };
+
     public BlogPostAdminAppService(
         BlogPostManager blogPostManager,
         IBlogPostRepository blogPostRepository,
@@ -109,6 +115,8 @@ public class BlogPostAdminAppService : CmsKitAppServiceBase, IBlogPostAdminAppSe
     [Authorize(CmsKitAdminPermissions.BlogPosts.Default)]
     public virtual async Task<PagedResultDto<BlogPostListDto>> GetListAsync(BlogPostGetListInput input)
     {
+        CheckSorting(input.Sorting, BlogPostSortingFields);
+
         var blogs = (await BlogRepository.GetListAsync()).ToDictionary(x => x.Id);
 
         var blogPosts = await BlogPostRepository.GetListAsync(

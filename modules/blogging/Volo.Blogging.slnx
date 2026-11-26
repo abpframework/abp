@@ -30,6 +30,7 @@
     <Project Path="src/Volo.Blogging.Installer/Volo.Blogging.Installer.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/Volo.Blogging.Web.Tests/Volo.Blogging.Web.Tests.csproj" />
     <Project Path="test/Volo.Blogging.Application.Tests/Volo.Blogging.Application.Tests.csproj" />
     <Project Path="test/Volo.Blogging.Domain.Tests/Volo.Blogging.Domain.Tests.csproj" />
     <Project Path="test/Volo.Blogging.EntityFrameworkCore.Tests/Volo.Blogging.EntityFrameworkCore.Tests.csproj" />

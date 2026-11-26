@@ -93,10 +93,23 @@
                 title: l("URL"),
                 data: "url",
                 render: function (data, type, row) {
-                    if (data !== null) {
-                        return '<a href="' + data + '#comment-' + row.id + '" target="_blank"><i class="fa fa-location-arrow"></i></a>';
+                    if (typeof data !== "string") {
+                        return "";
                     }
-                    return "";
+
+                    try {
+                        var url = new URL(data, document.baseURI);
+                        if (url.protocol !== "http:" && url.protocol !== "https:") {
+                            return "";
+                        }
+
+                        url.hash = "comment-" + row.id;
+                        return $('<a>', { href: url.href, target: '_blank', rel: 'noopener noreferrer' })
+                            .append($('<i>', { class: 'fa fa-location-arrow' }))
+                            .prop('outerHTML');
+                    } catch (e) {
+                        return "";
+                    }
                 }
             },
             {
@@ -108,7 +121,7 @@
                     var htmlContent = md.render(data);
                     return (
                         '<span data-toggle="tooltip" title="' +
-                        htmlContent +
+                        $.fn.dataTable.render.text().display(data || "") +
                         '" style="display: block; white-space: normal; word-break: break-all; max-width: 100%; overflow: hidden;">' +
                         htmlContent +
                         "</span>"

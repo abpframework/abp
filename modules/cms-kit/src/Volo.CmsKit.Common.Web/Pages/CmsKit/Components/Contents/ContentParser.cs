@@ -12,6 +12,9 @@ namespace Volo.CmsKit.Web.Contents;
 
 public class ContentParser : ITransientDependency
 {
+    // A widget ends at the first closing bracket and never spans lines, so matching stays linear.
+    private const string WidgetPattern = @"\[Widget[^\]\r\n]*\bType\s*=[^\]\r\n]*\]";
+
     private readonly CmsKitContentWidgetOptions _options;
 
     public ContentParser(IOptions<CmsKitContentWidgetOptions> options)
@@ -40,81 +43,61 @@ public class ContentParser : ITransientDependency
 
     protected virtual void ParseContent(string content, List<string> parsedList)
     {
-        var replacedText = Regex.Replace(content, @"\[Widget.*.Type=.*?\]", Delimeter);
+        var replacedText = Regex.Replace(content, WidgetPattern, Delimeter, RegexOptions.NonBacktracking);
         if (!replacedText.Contains(Delimeter))
         {
             parsedList.Add(replacedText);
+            return;
         }
 
-        while (replacedText.Contains(Delimeter))
+        var parts = replacedText.Split(Delimeter);
+        for (var i = 0; i < parts.Length; i++)
         {
-            //For parsing delimeter
-            var index = replacedText.IndexOf(Delimeter);
-            if (index != 0)
+            if (i > 0)
             {
-                parsedList.Add(replacedText.Substring(0, index));
-                replacedText = replacedText.Substring(index, replacedText.Length - index);
-                index = 0;
+                parsedList.Add(Delimeter);
             }
 
-            parsedList.Add(replacedText.Substring(index, Delimeter.Length));
-            replacedText = replacedText.Substring(Delimeter.Length, replacedText.Length - Delimeter.Length);
-
-            //for parsing the other side
-            index = replacedText.IndexOf(Delimeter);
-            if (index != -1)
+            if (parts[i].Length > 0 || (i > 0 && i < parts.Length - 1))
             {
-                parsedList.Add(replacedText.Substring(0, index));
-                replacedText = replacedText.Substring(index, replacedText.Length - index);
-            }
-            else if (replacedText.Length > 0)
-            {
-                parsedList.Add(replacedText);
+                parsedList.Add(parts[i]);
             }
         }
     }
 
     protected virtual void FillContentFragment(string content, List<string> parsedList, List<ContentFragment> contentFragments)
     {
-        content = Regex.Replace(content, @"=\s*""", @"=""");
-        content = Regex.Replace(content, @"""\s*=", @"""=");
-        var widgets = Regex.Matches(content, @"(?<=\[Widget)(.*?)(?=\])").Select(p => p.Value).ToList();
+        var widgets = Regex.Matches(content, WidgetPattern, RegexOptions.NonBacktracking);
         for (int i = 0, k = 0; i < parsedList.Count; i++)
         {
             if (parsedList[i] == Delimeter)
             {
-                if (widgets.Count > k)
+                if (k < widgets.Count)
                 {
-                    var preparedContent = string.Join("", widgets[k]);
-                    var keys = Regex.Matches(preparedContent, @"(?<=\s)(.*?)(?==\s*"")")
-                        .Select(p => p.Value).Where(p => p != string.Empty).ToList();
-                    var values = Regex.Matches(preparedContent, @"(?<=\s*[a-zA-Z]*=\s*"")(.*?)(?="")")
-                        .Select(p => p.Value).ToList();
-
-                    var widgetTypeIndex = keys.IndexOf("Type");
-                    if (widgetTypeIndex != -1)
+                    var properties = new Dictionary<string, string>();
+                    foreach (Match attribute in Regex.Matches(widgets[k].Value, @"(?<key>[^\s=""\[\]]+)\s*=\s*""(?<value>[^""]*)""", RegexOptions.NonBacktracking))
                     {
-                        var widgetType = values[widgetTypeIndex];
-                        var name = _options.WidgetConfigs.Where(p => p.Key == widgetType).Select(p => p.Value.Name).FirstOrDefault();
-                        if (name is not null && widgets.Count > k)
+                        properties[attribute.Groups["key"].Value] = attribute.Groups["value"].Value;
+                    }
+
+                    if (properties.TryGetValue("Type", out var widgetType) && _options.WidgetConfigs.TryGetValue(widgetType, out var config))
+                    {
+                        var fragment = new ContentFragment { Type = Widget };
+                        foreach (var property in properties)
                         {
-                            values[widgetTypeIndex] = name;
-                            var contentFragment = new ContentFragment() { Type = Widget };
-                            contentFragments.Add(contentFragment);
-                            for (int kv = 0; kv < values.Count; kv++)
-                            {
-                                contentFragments.FindLast(p => p == contentFragment)
-                                    .SetProperty(keys[kv], values[kv]);
-                            }
+                            fragment.SetProperty(property.Key, property.Value);
                         }
+
+                        fragment.SetProperty("Type", config.Name);
+                        contentFragments.Add(fragment);
                     }
                 }
+
                 k++;
             }
             else
             {
-                contentFragments.Add(new ContentFragment() { Type = Markdown }
-                .SetProperty(Content, parsedList[i]));
+                contentFragments.Add(new ContentFragment { Type = Markdown }.SetProperty(Content, parsedList[i]));
             }
         }
     }

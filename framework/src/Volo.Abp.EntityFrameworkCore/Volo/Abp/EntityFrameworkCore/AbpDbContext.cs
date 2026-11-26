@@ -104,6 +104,13 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
                 BindingFlags.Instance | BindingFlags.NonPublic
             )!;
 
+    private static readonly MethodInfo CreateDerivedTypeFilterExpressionMethodInfo
+        = typeof(AbpDbContext<TDbContext>)
+            .GetMethod(
+                nameof(CreateDerivedTypeFilterExpression),
+                BindingFlags.Instance | BindingFlags.NonPublic
+            )!;
+
     protected readonly DbContextOptions DbContextOptions;
 
     protected AbpDbContext(DbContextOptions<TDbContext> options)
@@ -870,14 +877,73 @@ public abstract class AbpDbContext<TDbContext> : DbContext, IAbpEfCoreDbContext,
         EntityTypeBuilder<TEntity> entityTypeBuilder)
         where TEntity : class
     {
-        if (mutableEntityType.BaseType == null && ShouldFilterEntity<TEntity>(mutableEntityType))
+        if (mutableEntityType.BaseType != null)
         {
-            var filterExpression = CreateFilterExpression<TEntity>(modelBuilder, entityTypeBuilder);
-            if (filterExpression != null)
+            return;
+        }
+
+        var filterExpression = ShouldFilterEntity<TEntity>(mutableEntityType)
+            ? CreateFilterExpression<TEntity>(modelBuilder, entityTypeBuilder)
+            : null;
+
+        // EF Core accepts a query filter only on the root of a hierarchy,
+        // so the filters of the derived types are also set here (guarded by a type check).
+        foreach (var derivedEntityType in mutableEntityType.GetDerivedTypes())
+        {
+            var derivedFilterExpression = (Expression<Func<TEntity, bool>>?)CreateDerivedTypeFilterExpressionMethodInfo
+                .MakeGenericMethod(typeof(TEntity), derivedEntityType.ClrType)
+                .Invoke(this, new object[] { modelBuilder, derivedEntityType });
+
+            if (derivedFilterExpression != null)
             {
-                entityTypeBuilder.HasAbpQueryFilter(filterExpression);
+                filterExpression = filterExpression == null
+                    ? derivedFilterExpression
+                    : QueryFilterExpressionHelper.CombineExpressions(filterExpression, derivedFilterExpression);
             }
         }
+
+        if (filterExpression != null)
+        {
+            entityTypeBuilder.HasAbpQueryFilter(filterExpression);
+        }
+    }
+
+    /// <summary>
+    /// Creates the filter of a derived entity type that implements <see cref="ISoftDelete"/> or <see cref="IMultiTenant"/>
+    /// while its base entity type does not. The filter is lifted to <typeparamref name="TEntity"/>,
+    /// so that it can be set on the root entity type. Returns null if the base entity type already covers the filters.
+    /// </summary>
+    protected virtual Expression<Func<TEntity, bool>>? CreateDerivedTypeFilterExpression<TEntity, TDerivedEntity>(
+        ModelBuilder modelBuilder,
+        IMutableEntityType derivedEntityType)
+        where TEntity : class
+        where TDerivedEntity : class, TEntity
+    {
+        var baseClrType = derivedEntityType.BaseType!.ClrType;
+
+        var addsSoftDelete = typeof(ISoftDelete).IsAssignableFrom(typeof(TDerivedEntity)) &&
+                             !typeof(ISoftDelete).IsAssignableFrom(baseClrType);
+        var addsMultiTenant = typeof(IMultiTenant).IsAssignableFrom(typeof(TDerivedEntity)) &&
+                              !typeof(IMultiTenant).IsAssignableFrom(baseClrType);
+
+        if (!addsSoftDelete && !addsMultiTenant)
+        {
+            return null;
+        }
+
+        if (!ShouldFilterEntity<TDerivedEntity>(derivedEntityType))
+        {
+            return null;
+        }
+
+        var derivedFilterExpression = CreateFilterExpression<TDerivedEntity>(
+            modelBuilder,
+            CreateEntityTypeBuilderFromMutableEntityType<TDerivedEntity>(modelBuilder, derivedEntityType)
+        );
+
+        return derivedFilterExpression == null
+            ? null
+            : QueryFilterExpressionHelper.ApplyToDerivedType<TEntity, TDerivedEntity>(derivedFilterExpression);
     }
 
     protected virtual void ConfigureValueConverter<TEntity>(

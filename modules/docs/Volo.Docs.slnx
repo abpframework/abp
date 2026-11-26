@@ -34,10 +34,12 @@
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Volo.Docs.Admin.Application.Tests/Volo.Docs.Admin.Application.Tests.csproj" />
+    <Project Path="test/Volo.Docs.Admin.HttpApi.Tests/Volo.Docs.Admin.HttpApi.Tests.csproj" />
     <Project Path="test/Volo.Docs.Application.Tests/Volo.Docs.Application.Tests.csproj" />
     <Project Path="test/Volo.Docs.Domain.Tests/Volo.Docs.Domain.Tests.csproj" />
     <Project Path="test/Volo.Docs.EntityFrameworkCore.Tests/Volo.Docs.EntityFrameworkCore.Tests.csproj" />
     <Project Path="test/Volo.Docs.MongoDB.Tests/Volo.Docs.MongoDB.Tests.csproj" />
     <Project Path="test/Volo.Docs.TestBase/Volo.Docs.TestBase.csproj" />
+    <Project Path="test/Volo.Docs.Web.Tests/Volo.Docs.Web.Tests.csproj" />
   </Folder>
 </Solution>

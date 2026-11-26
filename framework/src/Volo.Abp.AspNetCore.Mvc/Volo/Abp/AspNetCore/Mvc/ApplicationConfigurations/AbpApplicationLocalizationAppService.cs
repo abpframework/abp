@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.RequestLocalization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.External;
+using Volo.Abp.Validation;
 
 namespace Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 
@@ -15,23 +18,30 @@ public class AbpApplicationLocalizationAppService :
 {
     protected IExternalLocalizationStore ExternalLocalizationStore { get; }
     protected AbpLocalizationOptions LocalizationOptions { get; }
+    protected AbpRequestCultureResolver RequestCultureResolver { get; }
 
     public AbpApplicationLocalizationAppService(
         IExternalLocalizationStore externalLocalizationStore,
-        IOptions<AbpLocalizationOptions> localizationOptions)
+        IOptions<AbpLocalizationOptions> localizationOptions,
+        AbpRequestCultureResolver requestCultureResolver)
     {
         ExternalLocalizationStore = externalLocalizationStore;
         LocalizationOptions = localizationOptions.Value;
+        RequestCultureResolver = requestCultureResolver;
     }
 
     public virtual async Task<ApplicationLocalizationDto> GetAsync(ApplicationLocalizationRequestDto input)
     {
-        if (!CultureHelper.IsValidCultureCode(input.CultureName))
+        var culture = await RequestCultureResolver.ResolveAsync(input.CultureName);
+        if (culture == null)
         {
-            throw new AbpException("The selected culture is not valid! Make sure you enter a valid culture name.");
+            throw new AbpValidationException(new[]
+            {
+                new ValidationResult("The selected culture is not supported.", new[] { nameof(input.CultureName) })
+            });
         }
 
-        using (CultureHelper.Use(input.CultureName))
+        using (CultureHelper.Use(culture))
         {
             var resources = LocalizationOptions
                 .Resources

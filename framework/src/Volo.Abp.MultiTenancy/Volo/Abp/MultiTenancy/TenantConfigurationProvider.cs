@@ -8,6 +8,8 @@ namespace Volo.Abp.MultiTenancy;
 
 public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransientDependency
 {
+    public static int MaxTenantNameLength { get; set; } = 256;
+
     protected virtual ITenantResolver TenantResolver { get; }
     protected virtual ITenantStore TenantStore { get; }
     protected virtual ITenantNormalizer TenantNormalizer { get; }
@@ -70,9 +72,13 @@ public class TenantConfigurationProvider : ITenantConfigurationProvider, ITransi
         {
             return await TenantStore.FindAsync(parsedTenantId);
         }
-        else
+
+        // Tenant names come from request headers, cookies and routes; bound them before normalizing.
+        if (tenantIdOrName.Length > MaxTenantNameLength)
         {
-            return await TenantStore.FindAsync(TenantNormalizer.NormalizeName(tenantIdOrName)!);
+            return null;
         }
+
+        return await TenantStore.FindAsync(TenantNormalizer.NormalizeName(tenantIdOrName)!);
     }
 }

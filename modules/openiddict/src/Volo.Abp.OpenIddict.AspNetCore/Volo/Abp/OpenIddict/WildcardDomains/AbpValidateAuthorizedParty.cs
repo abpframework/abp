@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Server;
 
@@ -15,18 +14,20 @@ public class AbpValidateAuthorizedParty : AbpOpenIddictWildcardDomainBase<AbpVal
             .Build();
 
     public AbpValidateAuthorizedParty(
-        IOptions<AbpOpenIddictWildcardDomainOptions> wildcardDomainsOptions,
-        IOpenIddictApplicationManager applicationManager)
-        : base(wildcardDomainsOptions, new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager))
+        IOpenIddictApplicationManager applicationManager,
+        AbpOpenIddictWildcardDomainValidator wildcardDomainValidator)
+        : base(new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager), wildcardDomainValidator)
     {
-        OriginalHandler = new OpenIddictServerHandlers.Session.ValidateAuthorizedParty(applicationManager);
     }
 
     public async override ValueTask HandleAsync(OpenIddictServerEvents.ValidateEndSessionRequestContext context)
     {
         Check.NotNull(context, nameof(context));
 
-        if (await CheckWildcardDomainAsync(context.PostLogoutRedirectUri))
+        if (string.IsNullOrEmpty(context.ClientId) && context.IdentityTokenHintPrincipal != null &&
+            !string.IsNullOrEmpty(context.PostLogoutRedirectUri) &&
+            await WildcardDomainValidator.IsValidPostLogoutAsync(context.PostLogoutRedirectUri,
+                context.IdentityTokenHintPrincipal, context.Options.IgnoreEndpointPermissions))
         {
             return;
         }

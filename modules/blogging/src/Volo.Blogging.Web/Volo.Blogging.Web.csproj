@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\..\..\framework\src\Volo.Abp.Mapperly\Volo.Abp.Mapperly.csproj" />
     <ProjectReference Include="..\Volo.Blogging.Application.Contracts\Volo.Blogging.Application.Contracts.csproj" />
     <PackageReference Include="Markdig.Signed" />
+    <PackageReference Include="HtmlSanitizer" />
   </ItemGroup>
 
   <ItemGroup>

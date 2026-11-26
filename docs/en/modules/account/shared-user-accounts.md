@@ -35,6 +35,7 @@ When you use Shared User Accounts:
 
 - Username/email uniqueness becomes **global** (Host + all tenants). A username/email can exist only once, but that user can be invited into multiple tenants.
 - Some security/user management settings (2FA, lockout, password policies, recaptcha, etc.) are managed at the **Host** level.
+- The `EnableLocalLogin` setting is checked before the account is found, so it uses the tenant of the login request (the host for the default Account Pro login pages).
 
 If you are migrating from an isolated strategy, ABP will validate the existing data when you switch to Shared. If there are conflicts (e.g., the same email registered as separate users in different tenants), you must resolve them before enabling the shared strategy. See the [Migration Guide](#migration-guide) section below.
 

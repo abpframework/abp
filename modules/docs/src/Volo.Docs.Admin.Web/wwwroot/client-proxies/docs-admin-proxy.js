@@ -13,9 +13,10 @@
 
     volo.docs.admin.documentPdfAdmin.generatePdf = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
-        url: abp.appPath + 'api/docs/admin/documents/pdf/generate' + abp.utils.buildQueryString([{ name: 'projectId', value: input.projectId }, { name: 'version', value: input.version }, { name: 'languageCode', value: input.languageCode }]) + '',
-        type: 'GET',
-        dataType: null
+        url: abp.appPath + 'api/docs/admin/documents/pdf/generate',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(input)
       }, ajaxParams));
     };
 

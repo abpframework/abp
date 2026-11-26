@@ -5,6 +5,7 @@ using Volo.Abp.Authorization;
 using Volo.Abp.Features;
 using Volo.Abp.GlobalFeatures;
 using Volo.Abp.Users;
+using Volo.CmsKit.Blogs;
 using Volo.CmsKit.Features;
 using Volo.CmsKit.GlobalFeatures;
 using Volo.CmsKit.Ratings;
@@ -14,7 +15,7 @@ namespace Volo.CmsKit.Public.Ratings;
 
 [RequiresFeature(CmsKitFeatures.RatingEnable)]
 [RequiresGlobalFeature(typeof(RatingsFeature))]
-public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicAppService
+public class RatingPublicAppService : CmsKitBlogPostInteractionAppServiceBase, IRatingPublicAppService
 {
     protected IRatingRepository RatingRepository { get; }
     public ICmsUserLookupService CmsUserLookupService { get; }
@@ -23,7 +24,10 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
     public RatingPublicAppService(
         IRatingRepository ratingRepository,
         ICmsUserLookupService cmsUserLookupService,
-        RatingManager ratingManager)
+        RatingManager ratingManager,
+        IBlogPostRepository blogPostRepository,
+        IBlogFeatureAppService blogFeatureAppService)
+        : base(blogPostRepository, blogFeatureAppService)
     {
         RatingRepository = ratingRepository;
         CmsUserLookupService = cmsUserLookupService;
@@ -34,6 +38,8 @@ public class RatingPublicAppService : CmsKitPublicAppServiceBase, IRatingPublicA
     public virtual async Task<RatingDto> CreateAsync(string entityType, string entityId,
         CreateUpdateRatingInput input)
     {
+        await CheckBlogFeatureAsync(entityType, entityId, RatingsFeature.Name);
+
         var userId = CurrentUser.GetId();
         var user = await CmsUserLookupService.GetByIdAsync(userId);
 

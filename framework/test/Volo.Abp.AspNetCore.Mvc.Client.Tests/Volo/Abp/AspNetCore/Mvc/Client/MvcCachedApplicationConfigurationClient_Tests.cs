@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,7 @@ using NSubstitute;
 using Shouldly;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations;
 using Volo.Abp.AspNetCore.Mvc.ApplicationConfigurations.ClientProxies;
+using Volo.Abp.Http.Client;
 using Volo.Abp.Localization;
 using Volo.Abp.Security.Claims;
 using Xunit;
@@ -92,6 +94,76 @@ public class MvcCachedApplicationConfigurationClient_Tests : AbpAspNetCoreMvcCli
 
             await _localizationProxy.Received(1).GetAsync(Arg.Is<ApplicationLocalizationRequestDto>(x => x.CultureName == currentCulture));
             await _localizationProxy.Received(1).GetAsync(Arg.Is<ApplicationLocalizationRequestDto>(x => x.CultureName == serverCulture));
+        }
+    }
+
+    [Theory]
+    [InlineData("tr", "en")]
+    [InlineData("en-US", "en")]
+    public async Task Should_Retry_Rejected_Culture_With_Server_Culture(string currentCulture, string serverCulture)
+    {
+        using (CultureHelper.Use(currentCulture))
+        {
+            _configProxy.GetAsync(Arg.Any<ApplicationConfigurationRequestOptions>()).Returns(CreateConfigDto(serverCulture));
+
+            var resources = new Dictionary<string, ApplicationLocalizationResourceDto>
+            {
+                ["TestResource"] = new()
+            };
+            _localizationProxy.GetAsync(Arg.Is<ApplicationLocalizationRequestDto>(x => x.CultureName == currentCulture))
+                .Returns(Task.FromException<ApplicationLocalizationDto>(new AbpRemoteCallException
+                {
+                    HttpStatusCode = (int)HttpStatusCode.BadRequest
+                }));
+            _localizationProxy.GetAsync(Arg.Is<ApplicationLocalizationRequestDto>(x => x.CultureName == serverCulture))
+                .Returns(new ApplicationLocalizationDto { Resources = resources });
+
+            var result = await _applicationConfigurationClient.GetAsync();
+
+            result.Localization.Resources.ShouldBe(resources);
+            await _localizationProxy.Received(1).GetAsync(Arg.Is<ApplicationLocalizationRequestDto>(x => x.CultureName == currentCulture));
+            await _localizationProxy.Received(1).GetAsync(Arg.Is<ApplicationLocalizationRequestDto>(x => x.CultureName == serverCulture));
+        }
+    }
+
+    [Theory]
+    [InlineData(HttpStatusCode.BadRequest)]
+    [InlineData(HttpStatusCode.Unauthorized)]
+    [InlineData(HttpStatusCode.Forbidden)]
+    [InlineData(HttpStatusCode.InternalServerError)]
+    public async Task Should_Not_Retry_Errors_When_Culture_Has_Not_Changed(HttpStatusCode statusCode)
+    {
+        using (CultureHelper.Use("en"))
+        {
+            _configProxy.GetAsync(Arg.Any<ApplicationConfigurationRequestOptions>()).Returns(CreateConfigDto("en"));
+            var exception = new AbpRemoteCallException { HttpStatusCode = (int)statusCode };
+            _localizationProxy.GetAsync(Arg.Any<ApplicationLocalizationRequestDto>())
+                .Returns(Task.FromException<ApplicationLocalizationDto>(exception));
+
+            var result = await Should.ThrowAsync<AbpRemoteCallException>(() => _applicationConfigurationClient.GetAsync());
+
+            result.ShouldBeSameAs(exception);
+            await _localizationProxy.Received(1).GetAsync(Arg.Any<ApplicationLocalizationRequestDto>());
+        }
+    }
+
+    [Theory]
+    [InlineData(HttpStatusCode.Unauthorized)]
+    [InlineData(HttpStatusCode.Forbidden)]
+    [InlineData(HttpStatusCode.InternalServerError)]
+    public async Task Should_Not_Retry_Unrelated_Errors_When_Cultures_Differ(HttpStatusCode statusCode)
+    {
+        using (CultureHelper.Use("tr"))
+        {
+            _configProxy.GetAsync(Arg.Any<ApplicationConfigurationRequestOptions>()).Returns(CreateConfigDto("en"));
+            var exception = new AbpRemoteCallException { HttpStatusCode = (int)statusCode };
+            _localizationProxy.GetAsync(Arg.Any<ApplicationLocalizationRequestDto>())
+                .Returns(Task.FromException<ApplicationLocalizationDto>(exception));
+
+            var result = await Should.ThrowAsync<AbpRemoteCallException>(() => _applicationConfigurationClient.GetAsync());
+
+            result.ShouldBeSameAs(exception);
+            await _localizationProxy.Received(1).GetAsync(Arg.Any<ApplicationLocalizationRequestDto>());
         }
     }
 

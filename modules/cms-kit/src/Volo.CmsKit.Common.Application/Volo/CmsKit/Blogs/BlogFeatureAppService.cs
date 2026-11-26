@@ -24,9 +24,16 @@ public class BlogFeatureAppService : CmsKitAppServiceBase, IBlogFeatureAppServic
 
     public virtual async Task<BlogFeatureDto> GetOrDefaultAsync(Guid blogId, string featureName)
     {
-        var cacheItem = await Cache.GetOrAddAsync(
-                                new BlogFeatureCacheKey(blogId, featureName),
-                                () => GetOrDefaultFromRepositoryAsync(blogId, featureName));
+        var key = new BlogFeatureCacheKey(blogId, featureName);
+        var cacheItem = await Cache.GetAsync(key);
+        if (cacheItem == null)
+        {
+            cacheItem = await GetOrDefaultFromRepositoryAsync(blogId, featureName);
+            if (cacheItem.Id != Guid.Empty)
+            {
+                await Cache.SetAsync(key, cacheItem);
+            }
+        }
 
         return ObjectMapper.Map<BlogFeatureCacheItem, BlogFeatureDto>(cacheItem);
     }

@@ -113,7 +113,7 @@ Place `docs-langs.json` at the project root, outside the language directories:
 
 When a GitHub source cannot load this file, it falls back to the language configured by `DocsGithubLanguageOptions.DefaultLanguage`, which is English by default. The file-system source requires a valid `docs-langs.json` file.
 
-The language list is cached for 24 hours using the project short name, not the requested version. Keep `docs-langs.json` consistent across all versions. Clear the project cache after changing the manifest; the first version requested after a clear repopulates the project-wide language cache.
+The language list is cached for 24 hours per project and version, so each version can have its own `docs-langs.json`. Versions that the source does not list are not cached, and a fallback language list is kept only for a minute. Clear the project cache after changing the manifest.
 
 ### Adding a custom document source
 

@@ -172,7 +172,7 @@ $(function () {
 
         generateTextOnTree: function (item) {
             var itemClass = ' ou-text-no-members';
-            return '<span title="' + item.displayName + '" class="ou-text text-dark' + itemClass + '" data-menuitem-id="' + item.id + '">' +
+            return '<span title="' + $.fn.dataTable.render.text().display(item.displayName) + '" class="ou-text text-dark' + itemClass + '" data-menuitem-id="' + item.id + '">' +
                 $.fn.dataTable.render.text().display(item.displayName) +
                 ' <i class="fa fa-caret-down text-muted"></i></span > ';
         },

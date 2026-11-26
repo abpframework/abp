@@ -43,7 +43,8 @@ public class MethodInvocationFeatureCheckerService : IMethodInvocationFeatureChe
             .GetCustomAttributes(true)
             .OfType<RequiresFeatureAttribute>();
 
-        if (methodInfo.IsPublic)
+        // Explicit interface implementations are non-public but still part of the service contract.
+        if (methodInfo.IsPublic || (methodInfo.IsPrivate && methodInfo.IsVirtual && methodInfo.IsFinal))
         {
             attributes = attributes
                 .Union(

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Volo.Abp.Auditing;
 using Volo.Abp.Domain.Entities;
 
 namespace Volo.Docs.Admin.Projects
@@ -21,6 +22,7 @@ namespace Volo.Docs.Admin.Projects
 
         public string LatestVersionBranchName { get; set; }
 
+        [DisableAuditing]
         public Dictionary<string, object> ExtraProperties { get; set; }
 
         public string ConcurrencyStamp { get; set; }

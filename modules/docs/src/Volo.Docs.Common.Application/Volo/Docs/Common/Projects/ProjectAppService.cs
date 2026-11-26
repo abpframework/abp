@@ -7,9 +7,11 @@ using Microsoft.Extensions.Caching.Distributed;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Caching;
 using Volo.Abp.Data;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Threading;
 using Volo.Docs.Caching;
 using Volo.Docs.Documents;
+using Volo.Docs.GitHub.Documents.Version;
 using Volo.Docs.Projects;
 
 namespace Volo.Docs.Common.Projects
@@ -20,6 +22,7 @@ namespace Volo.Docs.Common.Projects
         private readonly IDistributedCache<List<VersionInfo>> _versionCache;
         private readonly IDocumentSourceFactory _documentSource;
         protected IDistributedCache<LanguageConfig> LanguageCache { get; }
+        protected ProjectLanguageCacheKeyProvider ProjectLanguageCacheKeyProvider { get; }
 
         private readonly SemaphoreSlim _syncSemaphore = new SemaphoreSlim(1, 1);
 
@@ -27,12 +30,14 @@ namespace Volo.Docs.Common.Projects
             IProjectRepository projectRepository,
             IDistributedCache<List<VersionInfo>> versionCache,
             IDocumentSourceFactory documentSource,
-            IDistributedCache<LanguageConfig> languageCache)
+            IDistributedCache<LanguageConfig> languageCache,
+            ProjectLanguageCacheKeyProvider projectLanguageCacheKeyProvider)
         {
             _projectRepository = projectRepository;
             _versionCache = versionCache;
             _documentSource = documentSource;
             LanguageCache = languageCache;
+            ProjectLanguageCacheKeyProvider = projectLanguageCacheKeyProvider;
         }
 
         public virtual async Task<ListResultDto<ProjectDto>> GetListAsync()
@@ -54,6 +59,12 @@ namespace Volo.Docs.Common.Projects
         public virtual async Task<ListResultDto<VersionInfoDto>> GetVersionsAsync(string shortName)
         {
             var project = await _projectRepository.GetByShortNameAsync(shortName);
+            var versions = await GetCachedVersionsAsync(project);
+            return new ListResultDto<VersionInfoDto>(ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions));
+        }
+
+        private async Task<List<VersionInfo>> GetCachedVersionsAsync(Project project)
+        {
             using (await _syncSemaphore.LockAsync())
             {
                 var versions = await _versionCache.GetAsync(CacheKeyGenerator.GenerateProjectVersionsCacheKey(project));
@@ -75,9 +86,7 @@ namespace Volo.Docs.Common.Projects
                     }
                 }
 
-                return new ListResultDto<VersionInfoDto>(
-                    ObjectMapper.Map<List<VersionInfo>, List<VersionInfoDto>>(versions)
-                );
+                return versions;
             }
         }
 
@@ -120,38 +129,48 @@ namespace Volo.Docs.Common.Projects
             var project = await _projectRepository.GetByShortNameAsync(shortName);
             var store = _documentSource.Create(project.DocumentStoreType);
 
-            version = GetProjectVersionPrefixIfExist(project) + version;
-
-            async Task<LanguageConfig> GetLanguagesAsync()
+            var versions = await GetCachedVersionsAsync(project);
+            var defaultVersion = project.LatestVersionBranchName;
+            if (defaultVersion.IsNullOrWhiteSpace())
             {
-                return await store.GetLanguageListAsync(project, version);
+                defaultVersion = versions.FirstOrDefault(x => !SemanticVersionHelper.IsPreRelease(x.Name))?.Name ?? versions.FirstOrDefault()?.Name;
             }
 
-            return await LanguageCache.GetOrAddAsync(
-                CacheKeyGenerator.GenerateProjectLanguageCacheKey(project),
-                GetLanguagesAsync,
-                () => new DistributedCacheEntryOptions
+            version = project.GetFullVersion((version.IsNullOrWhiteSpace() || string.Equals(version, ProjectConsts.Latest, StringComparison.OrdinalIgnoreCase)
+                ? defaultVersion
+                : version) ?? string.Empty);
+
+            // A source without versions and without a default branch serves one language list for the whole project.
+            var isKnownVersion = (!defaultVersion.IsNullOrWhiteSpace() && version == project.GetFullVersion(defaultVersion)) ||
+                                 versions.Any(x => project.GetFullVersion(x.Name) == version) ||
+                                 (!versions.Any() && defaultVersion.IsNullOrWhiteSpace() && version.IsNullOrEmpty());
+            var key = await ProjectLanguageCacheKeyProvider.GetKeyAsync(project, version);
+            if (key != null)
+            {
+                var cached = await LanguageCache.GetAsync(key);
+                if (cached != null)
                 {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+                    return cached;
                 }
-            );
-        }
-
-        private string GetProjectVersionPrefixIfExist(Project project)
-        {
-            if (GetGithubVersionProviderSource(project) != GithubVersionProviderSource.Branches)
-            {
-                return string.Empty;
             }
 
-            return project.GetProperty<string>("VersionBranchPrefix");
-        }
+            if (!isKnownVersion && (versions.Any() || (!version.IsNullOrEmpty() && !DocumentVersionHelper.IsValidUnlistedVersionName(version))))
+            {
+                throw new EntityNotFoundException(typeof(VersionInfo), version);
+            }
 
-        private GithubVersionProviderSource GetGithubVersionProviderSource(Project project)
-        {
-            return project.HasProperty("GithubVersionProviderSource")
-                ? project.GetProperty<GithubVersionProviderSource>("GithubVersionProviderSource")
-                : GithubVersionProviderSource.Releases;
+            var languages = await store.GetLanguageListAsync(project, version);
+            // Unlisted labels may be readable, but must not create language cache entries.
+            if (isKnownVersion && key != null)
+            {
+                await LanguageCache.SetAsync(key, languages, new DistributedCacheEntryOptions
+                {
+                    // A fallback comes from a failed read, keep it briefly so the source is retried soon without being called on every request.
+                    AbsoluteExpirationRelativeToNow = languages is FallbackLanguageConfig ? TimeSpan.FromMinutes(1) : TimeSpan.FromHours(24)
+                });
+            }
+
+            return languages;
         }
     }
 }

@@ -72,7 +72,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         input.MapExtraPropertiesTo(page);
         await PageRepository.InsertAsync(page);
 
-        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug), considerUow: true);
 
         return ObjectMapper.Map<Page, PageDto>(page);
     }
@@ -86,7 +86,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
             await InvalidateDefaultHomePageCacheAsync(considerUow: true);
         }
         
-        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug), considerUow: true);
 
         await PageManager.SetSlugAsync(page, input.Slug);
 
@@ -114,7 +114,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         }
         
         await PageRepository.DeleteAsync(page);
-        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug));
+        await PageCache.RemoveAsync(PageCacheItem.GetKey(page.Slug), considerUow: true);
         await CommentRepository.DeleteByEntityTypeAndIdAsync(PageConsts.EntityType, id.ToString());
     }
 
@@ -124,7 +124,7 @@ public class PageAdminAppService : CmsKitAdminAppServiceBase, IPageAdminAppServi
         var page = await PageRepository.GetAsync(id);
 
 		await PageManager.SetHomePageAsync(page);
-        await InvalidateDefaultHomePageCacheAsync();
+        await InvalidateDefaultHomePageCacheAsync(considerUow: true);
     }
 
     protected virtual async Task InvalidateDefaultHomePageCacheAsync(bool considerUow = false)

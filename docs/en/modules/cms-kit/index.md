@@ -94,7 +94,8 @@ Example `appsettings.json` configuration:
 "RemoteServices": {
   "AbpIdentity": {
     "BaseUrl": "https://localhost:44388/",
-    "UseCurrentAccessToken": false
+    "UseCurrentAccessToken": false,
+    "AllowClientCredentialsInHttpContext": true
   }
 },
 "IdentityClients": {
@@ -107,6 +108,8 @@ Example `appsettings.json` configuration:
   }
 }
 ```
+
+With `Volo.Abp.Http.Client.IdentityModel.Web`, set `AllowClientCredentialsInHttpContext=true` to allow application credentials during HTTP requests, including when `UseCurrentAccessToken=false`. This also permits anonymous requests, so authorize privileged endpoints before enabling it.
 
 See the [Identity module's External User Lookup Service section](../identity.md#external-user-lookup-service) and the [Synchronous Interservice Communication guide](../../guides/synchronous-interservice-communication.md) for the complete setup.
 

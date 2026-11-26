@@ -171,7 +171,7 @@ $(function () {
             let content = editor.getMarkdown();
             localStorage.setItem('content', content);
 
-            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content }, function (result) {
+            $.post("/CmsKitCommonWidgets/ContentPreview", { content: content, preventXSS: false }, function (result) {
 
                 var style = styleEditor.getValue();
                 var script = scriptEditor.getValue();

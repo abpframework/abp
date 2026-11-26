@@ -42,10 +42,12 @@
   </Folder>
   <Folder Name="/test/">
     <Project Path="test/Volo.CmsKit.Application.Tests/Volo.CmsKit.Application.Tests.csproj" />
+    <Project Path="test/Volo.CmsKit.Common.Web.Tests/Volo.CmsKit.Common.Web.Tests.csproj" />
     <Project Path="test/Volo.CmsKit.Domain.Tests/Volo.CmsKit.Domain.Tests.csproj" />
     <Project Path="test/Volo.CmsKit.EntityFrameworkCore.Tests/Volo.CmsKit.EntityFrameworkCore.Tests.csproj" />
     <Project Path="test/Volo.CmsKit.HttpApi.Client.ConsoleTestApp/Volo.CmsKit.HttpApi.Client.ConsoleTestApp.csproj" />
     <Project Path="test/Volo.CmsKit.MongoDB.Tests/Volo.CmsKit.MongoDB.Tests.csproj" />
+    <Project Path="test/Volo.CmsKit.Public.Web.Tests/Volo.CmsKit.Public.Web.Tests.csproj" />
     <Project Path="test/Volo.CmsKit.TestBase/Volo.CmsKit.TestBase.csproj" />
   </Folder>
 </Solution>

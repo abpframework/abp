@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Ganss.Xss;
 using Markdig;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -12,11 +13,21 @@ namespace Volo.Blogging.Pages.Blogs
 {
     public class BloggingPageHelper : ITransientDependency
     {
+        private readonly HtmlSanitizer _htmlSanitizer;
+
         public IHtmlLocalizer<BloggingResource> L { get; set; }
 
         public const string DefaultTitle = "Blog";
 
         public const int MaxShortContentLength = 200;
+
+        public BloggingPageHelper()
+        {
+            _htmlSanitizer = new HtmlSanitizer();
+            _htmlSanitizer.AllowedAttributes.Add("class");
+            _htmlSanitizer.AllowedAttributes.Add("data-bs-toggle");
+            _htmlSanitizer.AllowedAttributes.Add("data-bs-target");
+        }
 
         public string GetTitle(string title = null)
         {
@@ -87,13 +98,15 @@ namespace Volo.Blogging.Pages.Blogs
                 return "";
             }
 
-            return Markdig.Markdown.ToHtml(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)),
+            var html = Markdig.Markdown.ToHtml(Encoding.UTF8.GetString(Encoding.Default.GetBytes(content)),
                 new MarkdownPipelineBuilder()
                     .UseAutoLinks()
                     .UseBootstrap()
                     .UseGridTables()
                     .UsePipeTables()
                     .Build());
+
+            return _htmlSanitizer.Sanitize(html);
         }
 
         public LocalizedHtmlString GetLocalizedTimeAgoText(DateTime dt)
