@@ -38,6 +38,7 @@ public class BlogInteractionFeature_Tests : CmsKitApplicationTestBase
     [InlineData(CommentsFeature.Name)]
     [InlineData(RatingsFeature.Name)]
     [InlineData(ReactionsFeature.Name)]
+    [InlineData(MarkedItemsFeature.Name)]
     public async Task Disabled_Blog_Features_Should_Reject_Public_Writes_And_Allow_Them_After_Reenabling(string feature)
     {
         var data = GetRequiredService<CmsKitTestData>();
@@ -53,6 +54,7 @@ public class BlogInteractionFeature_Tests : CmsKitApplicationTestBase
     [InlineData(CommentsFeature.Name)]
     [InlineData(RatingsFeature.Name)]
     [InlineData(ReactionsFeature.Name)]
+    [InlineData(MarkedItemsFeature.Name)]
     public async Task Unset_Blog_Features_Should_Remain_Enabled(string feature)
     {
         var data = GetRequiredService<CmsKitTestData>();
@@ -75,6 +77,7 @@ public class BlogInteractionFeature_Tests : CmsKitApplicationTestBase
     [InlineData(CommentsFeature.Name)]
     [InlineData(RatingsFeature.Name)]
     [InlineData(ReactionsFeature.Name)]
+    [InlineData(MarkedItemsFeature.Name)]
     public async Task Missing_Or_Invalid_Blog_Posts_Should_Not_Accept_Writes(string feature)
     {
         foreach (var id in new[] { Guid.NewGuid().ToString(), "not-a-post-id" })
@@ -114,6 +117,9 @@ public class BlogInteractionFeature_Tests : CmsKitApplicationTestBase
                 break;
             case ReactionsFeature.Name:
                 await GetRequiredService<IReactionPublicAppService>().CreateAsync(entityType, entityId, StandardReactions.ThumbsUp);
+                break;
+            case MarkedItemsFeature.Name:
+                await GetRequiredService<IMarkedItemPublicAppService>().ToggleAsync(entityType, entityId);
                 break;
         }
     }

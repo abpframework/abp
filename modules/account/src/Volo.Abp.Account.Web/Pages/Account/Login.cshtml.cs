@@ -285,8 +285,11 @@ public class LoginModel : AccountPageModel
 
             if (user != null)
             {
-                // Clear the dynamic claims cache.
-                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+                // Clear the dynamic claims cache. A shared user's cache entry belongs to the user's tenant.
+                using (CurrentTenant.Change(user.TenantId))
+                {
+                    await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+                }
             }
 
             return await RedirectSafelyAsync(returnUrl, returnUrlHash);

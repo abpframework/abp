@@ -23,6 +23,12 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 
     protected ISettingManager SettingManager { get; }
 
+    // Sorting is applied to the entities, so only comment fields returned by the DTO are allowed.
+    protected static readonly string[] CommentSortingFields =
+    {
+        "Id", "EntityType", "EntityId", "Text", "RepliedCommentId", "CreatorId", "CreationTime", "Url", "IsApproved"
+    };
+
     public CommentAdminAppService(
         ICommentRepository commentRepository,
         ISettingManager settingManager)
@@ -33,6 +39,8 @@ public class CommentAdminAppService : CmsKitAdminAppServiceBase, ICommentAdminAp
 
     public virtual async Task<PagedResultDto<CommentWithAuthorDto>> GetListAsync(CommentGetListInput input)
     {
+        CheckSorting(input.Sorting, CommentSortingFields);
+
         var totalCount = await CommentRepository.GetCountAsync(
             input.Text,
             input.EntityType,

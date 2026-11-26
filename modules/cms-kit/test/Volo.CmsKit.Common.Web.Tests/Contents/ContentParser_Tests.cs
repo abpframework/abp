@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -100,35 +103,60 @@ public class ContentParser_Tests
         fragments.Single(x => x.Type == ContentConsts.Widget).GetProperty<string>("Type").ShouldBe("CmsCommenting");
     }
 
-    [Fact(Timeout = 10000)]
+    [Fact]
     public async Task Should_Handle_Repeated_Unterminated_Markers()
     {
         var content = string.Concat(Enumerable.Repeat("[Widget", 12000));
 
-        var fragments = await _parser.ParseAsync(content);
+        var fragments = await ParseQuicklyAsync(content);
 
         fragments.Single().GetProperty<string>(ContentConsts.Content).ShouldBe(content);
     }
 
-    [Fact(Timeout = 10000)]
+    [Fact]
     public async Task Should_Handle_Long_Malformed_Widget_Attributes()
     {
         var content = "[Widget Type=\"Comment\" " + new string(' ', 80000) + "Unterminated=\"value]";
 
-        var fragments = await _parser.ParseAsync(content);
+        var fragments = await ParseQuicklyAsync(content);
 
         fragments.Single().Type.ShouldBe(ContentConsts.Widget);
         fragments.Single().GetProperty<string>("Type").ShouldBe("CmsCommenting");
         fragments.Single().HasProperty("Unterminated").ShouldBeFalse();
     }
 
-    [Fact(Timeout = 10000)]
+    [Fact]
     public async Task Should_Handle_Many_Consecutive_Widgets()
     {
         var content = string.Concat(Enumerable.Repeat("[Widget Type=\"Comment\"]\n", 10000));
 
-        var fragments = await _parser.ParseAsync(content);
+        var fragments = await ParseQuicklyAsync(content);
 
         fragments.Count(x => x.Type == ContentConsts.Widget).ShouldBe(10000);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task Should_Parse_Backtracking_Inputs_In_Linear_Time(int input)
+    {
+        var content = input switch
+        {
+            0 => string.Concat(Enumerable.Repeat("[Widget] ", 20000)),
+            1 => "    " + string.Concat(Enumerable.Repeat("[Widget ", 10000)),
+            _ => "[Widget Type=\"Comment\"" + new string(' ', 40000) + "]"
+        };
+
+        (await ParseQuicklyAsync(content)).ShouldNotBeEmpty();
+    }
+
+    // Parsing completes synchronously, so the elapsed time is asserted instead of relying on a test timeout.
+    private async Task<List<ContentFragment>> ParseQuicklyAsync(string content)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        var fragments = await _parser.ParseAsync(content);
+        stopwatch.Elapsed.ShouldBeLessThan(TimeSpan.FromSeconds(2));
+        return fragments;
     }
 }

@@ -33,8 +33,6 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
 
     protected static readonly string[] AuthorSortingFields = { "Id", "UserName", "Name", "Surname" };
 
-    private static readonly string[] SortingDirections = { "asc", "desc", "ascending", "descending" };
-
     protected IBlogRepository BlogRepository { get; }
 
     protected IBlogPostRepository BlogPostRepository { get; }
@@ -100,26 +98,6 @@ public class BlogPostPublicAppService : CmsKitPublicAppServiceBase, IBlogPostPub
         return new PagedResultDto<CmsUserDto>(
             await BlogPostRepository.GetAuthorsHasBlogPostsCountAsync(input.Filter),
             authorDtos);
-    }
-
-    protected virtual void CheckSorting(string sorting, string[] allowedFields)
-    {
-        if (sorting.IsNullOrWhiteSpace())
-        {
-            return;
-        }
-
-        foreach (var expression in sorting.Split(','))
-        {
-            var parts = expression.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
-            var isValid = parts.Length is 1 or 2 &&
-                          allowedFields.Contains(parts[0], StringComparer.OrdinalIgnoreCase) &&
-                          (parts.Length == 1 || SortingDirections.Contains(parts[1], StringComparer.OrdinalIgnoreCase));
-            if (!isValid)
-            {
-                throw new AbpValidationException("Sorting expression is not supported.");
-            }
-        }
     }
 
     public virtual async Task<CmsUserDto> GetAuthorHasBlogPostAsync(Guid id)

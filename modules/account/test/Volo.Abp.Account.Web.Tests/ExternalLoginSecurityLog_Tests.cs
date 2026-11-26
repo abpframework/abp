@@ -12,6 +12,7 @@ using NSubstitute;
 using Shouldly;
 using Volo.Abp.Account.Web;
 using Volo.Abp.Account.Web.Pages.Account;
+using Volo.Abp.Caching;
 using Volo.Abp.Data;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.AspNetCore;
@@ -267,6 +268,10 @@ public class ExternalLoginSecurityLog_SharedUser_Tests : ExternalLoginSecurityLo
             await uow.CompleteAsync();
         }
 
+        var cache = services.GetRequiredService<IDistributedCache<AbpDynamicClaimCacheItem>>();
+        var cacheKey = AbpDynamicClaimCacheItem.CalculateCacheKey(user.Id, user.TenantId);
+        await cache.SetAsync(cacheKey, new AbpDynamicClaimCacheItem());
+
         var (page, _) = CreatePage(services, user.Email);
         using (services.GetRequiredService<ICurrentTenant>().Change(Guid.NewGuid()))
         using (var uow = services.GetRequiredService<IUnitOfWorkManager>().Begin())
@@ -290,6 +295,11 @@ public class ExternalLoginSecurityLog_SharedUser_Tests : ExternalLoginSecurityLo
             log.TenantId.ShouldBeNull();
             log.UserId.ShouldBe(user.Id);
             log.UserName.ShouldBe(user.UserName);
+        }
+
+        if (active)
+        {
+            (await cache.GetAsync(cacheKey)).ShouldBeNull();
         }
     }
 }

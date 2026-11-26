@@ -216,6 +216,8 @@ The following resolvers are provided and configured by default;
 - `HeaderTenantResolveContributor`: Tries to find current tenant id from HTTP headers. The header name is `__tenant` by default.
 - `CookieTenantResolveContributor`: Tries to find current tenant id from cookie values. The cookie name is `__tenant` by default.
 
+A resolved tenant name longer than `TenantConfigurationProvider.MaxTenantNameLength` (256 by default) is treated as an unknown tenant without being normalized. If you increase the tenant name length of the Tenant Management or SaaS module above this value, increase `TenantConfigurationProvider.MaxTenantNameLength` and the tenant switch form's `TenantInfoModel.MaxNameLength` as well.
+
 ###### Problems with the NGINX
 
 You may have problems with the `__tenant` in the HTTP Headers if you're using the [nginx](https://www.nginx.com/) as the reverse proxy server. Because it doesn't allow to use underscore and some other special characters in the HTTP headers and you may need to manually configure it. See the following documents please:
