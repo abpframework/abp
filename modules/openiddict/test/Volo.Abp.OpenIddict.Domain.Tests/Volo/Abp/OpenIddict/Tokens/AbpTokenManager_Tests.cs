@@ -115,6 +115,21 @@ public class AbpTokenManager_Tests : OpenIddictDomainTestBase
         (await GetStatusesAsync(_tokenManager.FindAsync(_testData.Subject2, null, null, null))).ShouldBe(new[] { OpenIddictConstants.Statuses.Revoked });
     }
 
+    [Fact]
+    public async Task FindAsync_Should_Not_Cache_Uncommitted_Status_When_Unit_Of_Work_Is_Rolled_Back()
+    {
+        (await GetStatusesAsync(_tokenManager.FindAsync(_testData.Subject2, null, null, null))).ShouldBe(new[] { OpenIddictConstants.Statuses.Valid });
+
+        // The test module disables transactions on IUnitOfWorkManager, so the transactional unit of work is started directly.
+        using (ServiceProvider.GetRequiredService<UnitOfWorkManager>().Begin(new AbpUnitOfWorkOptions { IsTransactional = true }))
+        {
+            (await _tokenManager.RevokeBySubjectAsync(_testData.Subject2)).ShouldBe(1);
+            (await GetStatusesAsync(_tokenManager.FindAsync(_testData.Subject2, null, null, null))).ShouldBe(new[] { OpenIddictConstants.Statuses.Revoked });
+        }
+
+        (await GetStatusAsync(_testData.Token2Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Valid);
+    }
+
     private async Task<List<string>> GetStatusesAsync(IAsyncEnumerable<object> tokens)
     {
         var statuses = new List<string>();

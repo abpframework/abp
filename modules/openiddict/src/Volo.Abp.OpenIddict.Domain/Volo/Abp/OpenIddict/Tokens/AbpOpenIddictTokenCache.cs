@@ -31,11 +31,11 @@ public class AbpOpenIddictTokenCache : AbpOpenIddictCacheBase<OpenIddictToken, O
     }
 
     // Not cached: any filter can be omitted, so a changed token can't find all the cached lists that contain it.
+    // The tokens aren't added to the cache either, a list read inside a transaction would cache uncommitted values.
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         await foreach (var token in Store.FindAsync(subject, client, status, type, cancellationToken))
         {
-            await AddAsync(token, cancellationToken);
             yield return token;
         }
     }
