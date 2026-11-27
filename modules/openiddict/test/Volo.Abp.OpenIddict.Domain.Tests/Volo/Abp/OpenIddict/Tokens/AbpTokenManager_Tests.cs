@@ -34,6 +34,21 @@ public class AbpTokenManager_Tests : OpenIddictDomainTestBase
     }
 
     [Fact]
+    public async Task RevokeAsync_Should_Remove_Tokens_From_Cache_When_A_Retry_Changes_No_Rows()
+    {
+        var tokenCache = ServiceProvider.GetRequiredService<IOpenIddictTokenCache<OpenIddictTokenModel>>();
+        var oldToken = (OpenIddictTokenModel)await _tokenManager.FindByIdAsync(_testData.Token2Id.ToString());
+
+        (await _tokenManager.RevokeAsync(_testData.Subject2, null, OpenIddictConstants.Statuses.Valid, null)).ShouldBe(1);
+
+        // The cleanup of the first revoke didn't remove the old token.
+        await tokenCache.AddAsync(oldToken, CancellationToken.None);
+
+        (await _tokenManager.RevokeAsync(_testData.Subject2, null, OpenIddictConstants.Statuses.Valid, null)).ShouldBe(0);
+        (await GetStatusAsync(_testData.Token2Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Revoked);
+    }
+
+    [Fact]
     public async Task RevokeByApplicationIdAsync_Should_Remove_Tokens_From_Cache()
     {
         (await GetStatusAsync(_testData.Token2Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Valid);

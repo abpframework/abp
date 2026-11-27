@@ -48,7 +48,8 @@ public class AbpTokenManager : OpenIddictTokenManager<OpenIddictTokenModel>
     {
         var count = await base.RevokeAsync(subject, client, status, type, cancellationToken);
 
-        if (count > 0)
+        // A filtered revoke that changes no rows still clears the cache, so a retry removes the entries an earlier cleanup missed.
+        if (count > 0 || !string.IsNullOrEmpty(subject) || !string.IsNullOrEmpty(client) || !string.IsNullOrEmpty(type))
         {
             // The revoked tokens no longer match the original status filter.
             await RemoveFromCacheAsync(ct => Store.FindAsync(subject, client, OpenIddictConstants.Statuses.Revoked, type, ct));

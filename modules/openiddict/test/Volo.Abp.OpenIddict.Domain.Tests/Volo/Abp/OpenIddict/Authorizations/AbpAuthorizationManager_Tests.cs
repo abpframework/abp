@@ -32,6 +32,21 @@ public class AbpAuthorizationManager_Tests : OpenIddictDomainTestBase
     }
 
     [Fact]
+    public async Task RevokeAsync_Should_Remove_Authorizations_From_Cache_When_A_Retry_Changes_No_Rows()
+    {
+        var authorizationCache = ServiceProvider.GetRequiredService<IOpenIddictAuthorizationCache<OpenIddictAuthorizationModel>>();
+        var oldAuthorization = (OpenIddictAuthorizationModel)await _authorizationManager.FindByIdAsync(_testData.Authorization1Id.ToString());
+
+        (await _authorizationManager.RevokeAsync(_testData.Subject1, null, OpenIddictConstants.Statuses.Valid, null)).ShouldBe(1);
+
+        // The cleanup of the first revoke didn't remove the old authorization.
+        await authorizationCache.AddAsync(oldAuthorization, CancellationToken.None);
+
+        (await _authorizationManager.RevokeAsync(_testData.Subject1, null, OpenIddictConstants.Statuses.Valid, null)).ShouldBe(0);
+        (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Revoked);
+    }
+
+    [Fact]
     public async Task RevokeByApplicationIdAsync_Should_Remove_Authorizations_From_Cache()
     {
         (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Valid);
