@@ -20,7 +20,7 @@ The Basic Theme has implementation for the following UI types:
 
 - [MVC UI](../../framework/ui/mvc-razor-pages/basic-theme.md)
 - [Blazor UI](../../framework/ui/blazor/basic-theme.md) — available in two Blazor UI library variants:
-  - **Blazorise** (default): `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.BasicTheme`
-  - **MudBlazor**: `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorBasicTheme`
+  - **MudBlazor** (default): `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.MudBlazorBasicTheme`
+  - **Blazorise**: `Volo.Abp.AspNetCore.Components.{Server,WebAssembly}.BasicTheme`
 - [Angular UI](../../framework/ui/angular/basic-theme.md)
 

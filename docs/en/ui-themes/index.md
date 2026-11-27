@@ -37,10 +37,12 @@ See the following documents based on the UI type you are using:
 
 When you create an ABP solution with a Blazor host (Blazor Server, Blazor WebAssembly or Blazor WebApp), you can additionally choose the underlying Blazor component library:
 
-* **Blazorise** — the original ABP default, based on Bootstrap.
-* **MudBlazor** — a Material-Design component library, available as an alternative variant. Each official theme has a MudBlazor version (e.g. `MudBlazorLeptonXTheme`, `MudBlazorLeptonXLiteTheme`, `MudBlazorBasicTheme`).
+* **MudBlazor** — the default for new solutions. A Material Design component library. Each official theme has a MudBlazor version (e.g. `MudBlazorLeptonXTheme`, `MudBlazorLeptonXLiteTheme`, `MudBlazorBasicTheme`).
+* **Blazorise** — based on Bootstrap. It was the default before MudBlazor and is still supported.
 
-The choice is made at solution creation time via the `--blazor-ui-library` option (`abp new ... -bul mudblazor`) or in the ABP Studio new-solution wizard.
+The choice is made at solution creation time in the ABP Studio new-solution wizard or via the `--blazor-ui-library` option (`abp new ... -bul blazorise` creates a Blazorise solution). It is stored as `blazorUiLibrary` in the `creatingStudioConfiguration` section of the `.abpsln` file, and modules and applications added to the solution later use the same library. `abp new-module` also accepts `--blazor-ui-library` to use another one.
+
+Solutions created before this value was stored don't have it, so ABP Studio detects the library from the projects of the solution. If it picks the wrong one, add `"blazorUiLibrary": "blazorise"` (or `"mudblazor"`) to the `creatingStudioConfiguration` section of the `.abpsln` file.
 
 ## See Also
 

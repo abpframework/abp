@@ -16,8 +16,8 @@
       "name": "BlazorUI",
       "displayName": "Blazor UI Library",
       "values": {
-        "Blazorise": "Blazorise",
-        "MudBlazor": "MudBlazor"
+        "MudBlazor": "MudBlazor",
+        "Blazorise": "Blazorise"
       },
       "dependsOn": {
         "UI": ["Blazor", "BlazorServer", "BlazorWebApp", "MAUIBlazor"]
