@@ -32,6 +32,8 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     protected ConcurrentDictionary<string, List<IEventHandlerFactory>> DynamicHandlerFactories { get; }
     protected IAzureServiceBusMessageConsumer Consumer { get; private set; } = default!;
 
+    protected List<IAzureServiceBusMessageConsumer> Consumers { get; private set; } = new();
+
     public AzureDistributedEventBus(
         IServiceScopeFactory serviceScopeFactory,
         ICurrentTenant currentTenant,
@@ -67,13 +69,75 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
 
     public void Initialize()
     {
-        Consumer = MessageConsumerFactory.CreateMessageConsumer(
-            Options.TopicName,
-            Options.SubscriberName,
-            Options.ConnectionName);
+        Consumers = GetTopicOptions().Select(topicOptions =>
+        {
+            var consumer = MessageConsumerFactory.CreateMessageConsumer(
+                topicOptions.TopicName,
+                topicOptions.SubscriberName,
+                topicOptions.ConnectionName);
 
-        Consumer.OnMessageReceived(ProcessEventAsync);
+            consumer.OnMessageReceived(ProcessEventAsync);
+            return consumer;
+        }).ToList();
+
+        Consumer = Consumers[0];
         SubscribeHandlers(AbpDistributedEventBusOptions.Handlers);
+    }
+
+    /// <summary>
+    /// Returns the topics this bus subscribes to: <see cref="AbpAzureEventBusOptions.Topics"/>
+    /// when configured, otherwise the single default topic from
+    /// <see cref="AbpAzureEventBusOptions.TopicName"/> (today's behaviour).
+    /// </summary>
+    protected virtual List<AzureEventBusTopicOptions> GetTopicOptions()
+    {
+        if (Options.Topics.Any())
+        {
+            return Options.Topics;
+        }
+
+        return new List<AzureEventBusTopicOptions>
+        {
+            new()
+            {
+                TopicName = Options.TopicName,
+                SubscriberName = Options.SubscriberName,
+                ConnectionName = Options.ConnectionName
+            }
+        };
+    }
+
+    /// <summary>
+    /// Resolves the topic an event should be published to: the entry in
+    /// <see cref="AbpAzureEventBusOptions.EventTopicMap"/> when the event has one,
+    /// otherwise the default topic from <see cref="AbpAzureEventBusOptions.TopicName"/>.
+    /// </summary>
+    protected virtual AzureEventBusTopicOptions GetTopicOptionsForEvent(string eventName)
+    {
+        if (Options.EventTopicMap.TryGetValue(eventName, out var topicName))
+        {
+            var topicOptions = Options.Topics.FirstOrDefault(t => t.TopicName == topicName);
+            if (topicOptions != null)
+            {
+                return topicOptions;
+            }
+
+            // Mapped to a topic that has no entry in Topics: use the mapped
+            // name with the default connection.
+            return new AzureEventBusTopicOptions
+            {
+                TopicName = topicName,
+                SubscriberName = Options.SubscriberName,
+                ConnectionName = Options.ConnectionName
+            };
+        }
+
+        return new AzureEventBusTopicOptions
+        {
+            TopicName = Options.TopicName,
+            SubscriberName = Options.SubscriberName,
+            ConnectionName = Options.ConnectionName
+        };
     }
 
     private async Task ProcessEventAsync(ServiceBusReceivedMessage message)
@@ -259,32 +323,43 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
     {
         var outgoingEventArray =  outgoingEvents.ToArray();
 
-        var publisher = await PublisherPool.GetAsync(
-            Options.TopicName,
-            Options.ConnectionName);
-
-        using var messageBatch = await publisher.CreateMessageBatchAsync();
-
-        foreach (var outgoingEvent in outgoingEventArray)
+        // A ServiceBusMessageBatch belongs to one publisher (one topic), so
+        // group the events by their resolved topic and send one batch per topic.
+        var eventsByTopic = outgoingEventArray.GroupBy(outgoingEvent =>
         {
-            var message = new ServiceBusMessage(outgoingEvent.EventData) { Subject = outgoingEvent.EventName };
+            var topicOptions = GetTopicOptionsForEvent(outgoingEvent.EventName);
+            return (topicOptions.TopicName, topicOptions.ConnectionName);
+        });
 
-            if (message.MessageId.IsNullOrWhiteSpace())
+        foreach (var topicGroup in eventsByTopic)
+        {
+            var publisher = await PublisherPool.GetAsync(
+                topicGroup.Key.TopicName,
+                topicGroup.Key.ConnectionName);
+
+            using var messageBatch = await publisher.CreateMessageBatchAsync();
+
+            foreach (var outgoingEvent in topicGroup)
             {
-                message.MessageId = outgoingEvent.Id.ToString();
+                var message = new ServiceBusMessage(outgoingEvent.EventData) { Subject = outgoingEvent.EventName };
+
+                if (message.MessageId.IsNullOrWhiteSpace())
+                {
+                    message.MessageId = outgoingEvent.Id.ToString();
+                }
+
+                message.CorrelationId = outgoingEvent.GetCorrelationId();
+                SetTenantIdProperty(message, outgoingEvent.GetTenantId());
+
+                if (!messageBatch.TryAddMessage(message))
+                {
+                    throw new AbpException(
+                        "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
+                }
             }
 
-            message.CorrelationId = outgoingEvent.GetCorrelationId();
-            SetTenantIdProperty(message, outgoingEvent.GetTenantId());
-
-            if (!messageBatch.TryAddMessage(message))
-            {
-                throw new AbpException(
-                    "The message is too large to fit in the batch. Set AbpEventBusBoxesOptions.OutboxWaitingEventMaxCount to reduce the number");
-            }
+            await publisher.SendMessagesAsync(messageBatch);
         }
-
-        await publisher.SendMessagesAsync(messageBatch);
 
         foreach (var outgoingEvent in outgoingEventArray)
         {
@@ -378,9 +453,11 @@ public class AzureDistributedEventBus : DistributedEventBusBase, ISingletonDepen
         message.CorrelationId = correlationId;
         SetTenantIdProperty(message, tenantId);
 
+        var topicOptions = GetTopicOptionsForEvent(eventName);
+
         var publisher = await PublisherPool.GetAsync(
-            Options.TopicName,
-            Options.ConnectionName);
+            topicOptions.TopicName,
+            topicOptions.ConnectionName);
 
         await publisher.SendMessageAsync(message);
     }
