@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
@@ -72,7 +73,54 @@ public class AbpAuthorizationManager_Tests : OpenIddictDomainTestBase
         using (var uow = ServiceProvider.GetRequiredService<UnitOfWorkManager>().Begin(new AbpUnitOfWorkOptions { IsTransactional = true }))
         {
             (await _authorizationManager.RevokeBySubjectAsync(_testData.Subject1)).ShouldBe(1);
+            (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Revoked);
+            await uow.CompleteAsync();
+        }
+
+        (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Revoked);
+    }
+
+    [Fact]
+    public async Task FindByIdAsync_In_Rolled_Back_Unit_Of_Work_Should_Not_Cache_Uncommitted_Status()
+    {
+        using (ServiceProvider.GetRequiredService<UnitOfWorkManager>().Begin(new AbpUnitOfWorkOptions { IsTransactional = true }))
+        {
+            (await _authorizationManager.RevokeBySubjectAsync(_testData.Subject1)).ShouldBe(1);
+            (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Revoked);
+        }
+
+        (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Valid);
+    }
+
+    [Fact]
+    public async Task RevokeBySubjectAsync_Should_Remove_Authorizations_From_Cache_When_Read_In_The_Same_Unit_Of_Work()
+    {
+        using (var uow = ServiceProvider.GetRequiredService<UnitOfWorkManager>().Begin(new AbpUnitOfWorkOptions { IsTransactional = true }))
+        {
             (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Valid);
+            (await _authorizationManager.RevokeBySubjectAsync(_testData.Subject1)).ShouldBe(1);
+            await uow.CompleteAsync();
+        }
+
+        (await GetStatusAsync(_testData.Authorization1Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Revoked);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_Should_Remove_Authorization_Cached_Again_Before_Unit_Of_Work_Is_Completed()
+    {
+        var authorizationCache = ServiceProvider.GetRequiredService<IOpenIddictAuthorizationCache<OpenIddictAuthorizationModel>>();
+        var oldAuthorization = (OpenIddictAuthorizationModel)await _authorizationManager.FindByIdAsync(_testData.Authorization1Id.ToString());
+
+        using (var uow = ServiceProvider.GetRequiredService<UnitOfWorkManager>().Begin(new AbpUnitOfWorkOptions { IsTransactional = true }))
+        {
+            (await _authorizationManager.TryRevokeAsync(await _authorizationManager.FindByIdAsync(_testData.Authorization1Id.ToString()))).ShouldBeTrue();
+
+            // Another request that still reads the committed values caches the old authorization again.
+            using (_unitOfWorkManager.Begin(requiresNew: true))
+            {
+                await authorizationCache.AddAsync(oldAuthorization, CancellationToken.None);
+            }
+
             await uow.CompleteAsync();
         }
 
