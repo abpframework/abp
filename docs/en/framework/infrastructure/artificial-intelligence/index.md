@@ -39,3 +39,9 @@ Check the following documentation to learn how to use these libraries with the A
 - [ABP Microsoft.Extensions.AI integration](./microsoft-extensions-ai.md)
 - [ABP Microsoft.Agents.AI (Agent Framework) integration](./microsoft-agent-framework.md)
 - [ABP Microsoft.SemanticKernel integration](./microsoft-semantic-kernel.md)
+
+## Agent Tools
+
+ABP can turn the application services of your application into tools for AI agents. Each tool call is permission-checked, tenant-scoped, audited and subject to a per-tool policy. Any `IChatClient` can use the tools, and external agents can use them over the Model Context Protocol (MCP).
+
+See [Agent Tools](./agent-tools/index.md).

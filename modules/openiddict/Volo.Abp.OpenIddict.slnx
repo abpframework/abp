@@ -7,6 +7,7 @@
     <Project Path="app/OpenIddict.Demo.Server/OpenIddict.Demo.Server.csproj" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.OpenIddict.AgentTools/Volo.Abp.OpenIddict.AgentTools.csproj" />
     <Project Path="src/Volo.Abp.OpenIddict.AspNetCore/Volo.Abp.OpenIddict.AspNetCore.csproj" />
     <Project Path="src/Volo.Abp.OpenIddict.Domain.Shared/Volo.Abp.OpenIddict.Domain.Shared.csproj" />
     <Project Path="src/Volo.Abp.OpenIddict.Domain/Volo.Abp.OpenIddict.Domain.csproj" />
@@ -16,6 +17,7 @@
     <Project Path="src/Volo.Abp.PermissionManagement.Domain.OpenIddict/Volo.Abp.PermissionManagement.Domain.OpenIddict.csproj" />
   </Folder>
   <Folder Name="/test/">
+    <Project Path="test/Volo.Abp.OpenIddict.AgentTools.Tests/Volo.Abp.OpenIddict.AgentTools.Tests.csproj" />
     <Project Path="test/Volo.Abp.OpenIddict.AspNetCore.Tests/Volo.Abp.OpenIddict.AspNetCore.Tests.csproj" />
     <Project Path="test/Volo.Abp.OpenIddict.Domain.Tests/Volo.Abp.OpenIddict.Domain.Tests.csproj" />
     <Project Path="test/Volo.Abp.OpenIddict.EntityFrameworkCore.Tests/Volo.Abp.OpenIddict.EntityFrameworkCore.Tests.csproj" />

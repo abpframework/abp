@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\..\common.test.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Volo.Abp.AgentTools.Tests</AssemblyName>
+    <PackageId>Volo.Abp.AgentTools.Tests</PackageId>
+    <!-- The XML docs of the sample services are tool descriptions. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <RootNamespace />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Volo.Abp.AgentTools\Volo.Abp.AgentTools.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Autofac\Volo.Abp.Autofac.csproj" />
+    <ProjectReference Include="..\..\src\Volo.Abp.Ddd.Application.Contracts\Volo.Abp.Ddd.Application.Contracts.csproj" />
+    <ProjectReference Include="..\AbpTestBase\AbpTestBase.csproj" />
+  </ItemGroup>
+
+</Project>

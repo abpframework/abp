@@ -634,6 +634,40 @@
                 {
                   "text": "Semantic Kernel",
                   "path": "framework/infrastructure/artificial-intelligence/microsoft-semantic-kernel.md"
+                },
+                {
+                  "text": "Agent Tools",
+                  "items": [
+                    {
+                      "text": "Overview",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/index.md",
+                      "isIndex": true
+                    },
+                    {
+                      "text": "Exposing Tools",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/exposing-tools.md"
+                    },
+                    {
+                      "text": "Using Tools from Your Own Chat Client",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/chat-clients.md"
+                    },
+                    {
+                      "text": "Tool Policy",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/policy.md"
+                    },
+                    {
+                      "text": "MCP Endpoint",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/mcp.md"
+                    },
+                    {
+                      "text": "OpenIddict Setup",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/openiddict.md"
+                    },
+                    {
+                      "text": "Security Notes and Known Limits",
+                      "path": "framework/infrastructure/artificial-intelligence/agent-tools/security.md"
+                    }
+                  ]
                 }
               ]
             },
@@ -2689,6 +2723,32 @@
             {
               "text": "Web Authentication API (WebAuthn) passkeys",
               "path": "modules/account/passkey.md"
+            }
+          ]
+        },
+        {
+          "text": "Agent Tools (Pro)",
+          "items": [
+            {
+              "text": "Overview",
+              "path": "modules/agent-tools/index.md",
+              "isIndex": true
+            },
+            {
+              "text": "Installation",
+              "path": "modules/agent-tools/installation.md"
+            },
+            {
+              "text": "Tool Policy and Management Page",
+              "path": "modules/agent-tools/policy.md"
+            },
+            {
+              "text": "AI Management Integration",
+              "path": "modules/agent-tools/ai-management.md"
+            },
+            {
+              "text": "MCP Client Preset",
+              "path": "modules/agent-tools/openiddict-preset.md"
             }
           ]
         },

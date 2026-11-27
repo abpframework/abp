@@ -31,7 +31,8 @@
     <PackageVersion Include="Dapper" Version="2.1.66" />
     <PackageVersion Include="Dapr.AspNetCore" Version="1.16.0" />
     <PackageVersion Include="Dapr.Client" Version="1.16.0" />
-    <PackageVersion Include="ModelContextProtocol" Version="0.5.0-preview.1" />
+    <PackageVersion Include="ModelContextProtocol" Version="1.1.0" />
+    <PackageVersion Include="ModelContextProtocol.AspNetCore" Version="1.1.0" />
     <PackageVersion Include="MyCSharp.HttpUserAgentParser" Version="3.0.28" />
     <PackageVersion Include="Devart.Data.Oracle.EFCore" Version="11.3.248.11" />
     <PackageVersion Include="DistributedLock.Core" Version="1.0.8" />
@@ -93,6 +94,7 @@
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="11.0.0" />
     <PackageVersion Include="Microsoft.SemanticKernel" Version="1.71.0" />
     <PackageVersion Include="Microsoft.SemanticKernel.Abstractions" Version="1.71.0" />
+    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="10.3.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.7.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.Memory" Version="11.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="11.0.0" />

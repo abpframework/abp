@@ -80,6 +80,7 @@ ABP has many **additional modules** compared to the open-source ABP project. Als
 | [Twilio SMS](../modules/twilio-sms.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [GDPR](../modules/gdpr.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
 | [AI Management](../modules/ai-management/index.md) | <i class="fa fa-minus text-secondary"></i>                   | <i class="fa fa-check text-success"></i>                   |
+| Agent Tools | [Basic](../framework/infrastructure/artificial-intelligence/agent-tools/index.md) | [PRO](../modules/agent-tools/index.md) |
 
 Some modules have "Basic" (open-source) and "PRO" (commercial) versions. The next sections show the differences between the basic and the PRO versions.
 
@@ -132,6 +133,22 @@ The "SaaS" module is aimed to be a complete SaaS solution while the free one is 
 | Separate tenant databases <sup>[1]</sup> | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
 
 <sup>[1]</sup> ABP supports separate tenant databases at the framework level. However, only the commercial version SaaS module has a management UI, automatic database migration system and separate tenant database schema support.
+
+### Agent Tools: Basic vs PRO
+
+The open-source packages turn application services into AI tools. The PRO module adds their management.
+
+| Feature                                                | Basic                                      | Pro                                      |
+| ------------------------------------------------------ | ------------------------------------------ | ---------------------------------------- |
+| Application services as permission-checked and audited tools | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i> |
+| Tools for your own chat client                         | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i> |
+| MCP endpoint                                           | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i> |
+| OpenIddict scope and client seed for MCP clients       | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i> |
+| Tool policy in configuration and code                  | <i class="fa fa-check text-success"></i>   | <i class="fa fa-check text-success"></i> |
+| Tool policy per host and tenant, stored in the database | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
+| Management page and policy HTTP API                    | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
+| MCP client presets in the OpenIddict management UI     | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
+| AI Management chat integration                         | <i class="fa fa-minus text-secondary"></i> | <i class="fa fa-check text-success"></i> |
 
 ## ABP CLI vs ABP Suite
 

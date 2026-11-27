@@ -1,0 +1,13 @@
+{
+  "culture": "tr",
+  "texts": {
+    "AgentTools:ToolNotFound": "'{ToolName}' adında bir ajan aracı yok.",
+    "AgentTools:ToolDisabled": "'{ToolName}' ajan aracı devre dışı.",
+    "AgentTools:ApprovalNotSupported": "'{ToolName}' ajan aracı insan onayı gerektiriyor, ancak bu istemci onayı desteklemiyor.",
+    "AgentTools:ApprovalPolicyChanged": "'{ToolName}' ajan aracı artık insan onayı gerektiriyor, ancak onaysız listelenmişti. Araç listesini yeniden alın.",
+    "AgentTools:FeatureDisabled": "Ajan araçları geçerli kiracı için etkin değil.",
+    "Feature:AgentTools": "Ajan araçları",
+    "Feature:AgentTools.Enable": "Ajan araçlarını etkinleştir",
+    "Feature:AgentTools.Enable.Description": "Yapay zeka ajanlarının ve MCP istemcilerinin uygulamanın ajan araçlarını kullanmasına izin verir."
+  }
+}

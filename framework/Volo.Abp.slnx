@@ -1,5 +1,9 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="src/Volo.Abp.AgentTools.Abstractions/Volo.Abp.AgentTools.Abstractions.csproj" />
+    <Project Path="src/Volo.Abp.AgentTools.AspNetCore/Volo.Abp.AgentTools.AspNetCore.csproj" />
+    <Project Path="src/Volo.Abp.AgentTools.Mcp/Volo.Abp.AgentTools.Mcp.csproj" />
+    <Project Path="src/Volo.Abp.AgentTools/Volo.Abp.AgentTools.csproj" />
     <Project Path="src/Volo.Abp.AI.Abstractions/Volo.Abp.AI.Abstractions.csproj" />
     <Project Path="src/Volo.Abp.AI/Volo.Abp.AI.csproj" />
     <Project Path="src/Volo.Abp.ApiVersioning.Abstractions/Volo.Abp.ApiVersioning.Abstractions.csproj" />
@@ -182,6 +186,9 @@
   <Folder Name="/test/">
     <Project Path="test/AbpTestBase/AbpTestBase.csproj" />
     <Project Path="test/SimpleConsoleDemo/SimpleConsoleDemo.csproj" />
+    <Project Path="test/Volo.Abp.AgentTools.AspNetCore.Tests/Volo.Abp.AgentTools.AspNetCore.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AgentTools.Mcp.Tests/Volo.Abp.AgentTools.Mcp.Tests.csproj" />
+    <Project Path="test/Volo.Abp.AgentTools.Tests/Volo.Abp.AgentTools.Tests.csproj" />
     <Project Path="test/Volo.Abp.AI.Tests/Volo.Abp.AI.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.Authentication.OAuth.Tests/Volo.Abp.AspNetCore.Authentication.OAuth.Tests.csproj" />
     <Project Path="test/Volo.Abp.AspNetCore.MultiTenancy.Tests/Volo.Abp.AspNetCore.MultiTenancy.Tests.csproj" />

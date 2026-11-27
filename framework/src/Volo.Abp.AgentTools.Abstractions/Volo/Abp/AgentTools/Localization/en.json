@@ -1,0 +1,13 @@
+{
+  "culture": "en",
+  "texts": {
+    "AgentTools:ToolNotFound": "There is no agent tool named '{ToolName}'.",
+    "AgentTools:ToolDisabled": "The agent tool '{ToolName}' is disabled.",
+    "AgentTools:ApprovalNotSupported": "The agent tool '{ToolName}' requires human approval, which this client does not support.",
+    "AgentTools:ApprovalPolicyChanged": "The agent tool '{ToolName}' now requires human approval, but it was listed without it. Get the tool list again.",
+    "AgentTools:FeatureDisabled": "Agent tools are not enabled for the current tenant.",
+    "Feature:AgentTools": "Agent tools",
+    "Feature:AgentTools.Enable": "Enable agent tools",
+    "Feature:AgentTools.Enable.Description": "Lets AI agents and MCP clients use the application's agent tools."
+  }
+}
