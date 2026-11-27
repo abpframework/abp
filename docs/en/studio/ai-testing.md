@@ -22,7 +22,7 @@ ABP Studio has two AI-powered tests for the open solution:
 - **[UI/UX Test](ui-ux-test.md)** checks the pages of the running applications and the UI code for broken layouts, accessibility problems, missing translations and pages that do not work as they should.
 - **[Security Test](security-test.md)** reviews the code for vulnerabilities and attacks the running applications the way a penetration tester would.
 
-Both tests are opened from the menu bar, use the same inputs, show their findings the same way, and can send the findings to the [AI Agent](ai-agent.md) to be fixed. They also run without the UI, from the [ABP CLI and on CI](ai-testing-on-ci.md).
+Both tests are opened from the menu bar, use the same inputs, show their findings the same way, and can send the findings to the [AI Agent](ai-agent.md) to be fixed. They test the whole application, or [a single page](#testing-a-page) of it. They also run without the UI, from the [ABP CLI and on CI](ai-testing-on-ci.md).
 
 ## Codebase and Runtime
 
@@ -49,11 +49,25 @@ Only one of the two tests (or a re-verification) runs at a time.
 2. Choose the mode: *Codebase + Runtime*, *Codebase* or *Runtime*.
 3. Tick the running applications under *Apps to Test*.
 4. Optionally pick a model in *Test with*, and click *Configure Inputs* to add test accounts or instructions.
-5. Click *Start Test*.
+5. Click *Start Test* and choose *Test the whole application*.
 
 *Stop Test* ends the test after the step it is on and keeps the findings found so far; the status reads *Stopping…* until then. Clicking *Stop Test* again while it waits, and confirming with *Stop Now*, ends the test at once, and nothing from that run is kept. If the AI can no longer be used (no credits left, a rejected key, or the AI access was lost), the test stops the same way as *Stop Test* and says why.
 
 With *Incremental* on, the code review covers only the files changed since the last test, and the findings of the other files are carried over. The running applications are always tested in full.
+
+## Testing a Page
+
+A test can cover one page instead of the whole application, for example a page you have just built. Click *Start Test* and choose *Test a page…*, or right-click a running application in the [Solution Runner](running-applications.md) and choose *AI Testing* → *Test a Page (UI/UX)...* or *Test a Page (Security)...*, which opens the test with that application chosen.
+
+1. Choose the *App* the page belongs to, and type the *Page path*, such as `/Orders`. A full address pasted from the browser, such as `https://localhost:44302/Orders`, fills in both.
+2. Optionally list the *Page files*, one per line, relative to the solution folder. Leave them empty, and the AI finds them.
+3. Click *Find Scope*. The AI finds the page's files: the page itself, its dialogs, and the services, controllers and DTOs it calls. The Security Test also lists the *API calls* behind the page. Finding the scope makes a few AI calls.
+4. Check what the test will cover, and remove what does not belong to the page. *Back* returns to the page path.
+5. Click *Start Test*.
+
+The test covers that page only: its main content, its files and the API calls it makes. The menu, the header and the footer every page shares are left to the test of the whole application. What each test does with the page is described on its page ([UI/UX Test](ui-ux-test.md#testing-a-page), [Security Test](security-test.md#testing-a-page)).
+
+The *Codebase* part needs the page's files. If none is left, start the test with *Runtime* only, which tests the running page.
 
 ## Test Inputs
 
@@ -105,6 +119,7 @@ Passwords are never written to the file. Each account names an environment varia
 | `accounts` | Up to two accounts: `username` and `passwordEnv`, the name of the environment variable that holds the password. |
 | `instructions` / `instructionsFile` | The test instructions, as text or as a Markdown file inside the solution folder. |
 | `viewports` | UI/UX Test only: the screen widths to test the pages at (`360`, `768`, `1280`, `1920`). |
+| `page` | Used by the CLI: a page to test instead of the whole application, with `app` (the name of one of the `targets`, or left out when there is one), `path` (such as `/Orders`, or a full address) and optionally `files`. See [Testing a page](ai-testing-on-ci.md#testing-a-page). |
 
 The Security Test file also holds the test's [policy](security-test.md#policy): `scope`, `suppress` and `severityOverrides`. Saving the inputs from Studio keeps these fields as they are.
 
@@ -114,9 +129,13 @@ So that a cloned repository cannot send the passwords elsewhere, the `targets` a
 
 The findings are listed with the most severe first. The last results of the open solution are shown again when the test is opened.
 
+The results are kept for the whole application and for each tested page (the last 20 pages). When there is more than one, a list next to the findings heading switches between them: *Whole application*, or a page with its application, such as */Orders (Web)*.
+
+Within each, the *Codebase* and *Runtime* findings are kept apart: a *Codebase* test replaces only the code findings and keeps the running applications' findings, and the other way round. The heading then shows when each was tested, and *Found in* filters the list to the findings from the *Code* or from the *Running app*. The code and the running applications' findings are matched to each other only by a test that runs both.
+
 - *View Results* opens the results in a tab of their own.
 - *Export Results* saves them as Markdown or JSON.
-- *Clear Results* deletes them.
+- *Clear Results* deletes the results shown, of the whole application or of the page.
 
 Each test also shows what it covered, and checks the findings of the AI a second time before reporting them; see [UI/UX Test](ui-ux-test.md#coverage) and [Security Test](security-test.md#findings). Few findings with a large coverage mean the application looks good; few findings with a small coverage mean the test could not reach much of it.
 

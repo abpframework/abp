@@ -51,6 +51,8 @@ abp test security --solution MyCompany.MyProject.abpsln --mode both --start
 | `--start` | Starts the solution's default run profile before the test, and stops what it started afterwards. |
 | `--profile` | The run profile `--start` uses, instead of the default one. |
 | `--changed-since` | Reviews only the code changed since a git ref (`origin/main`), a date (`2026-11-01`) or a time span (`7d`, `2w`, `12h`, `3mo`). |
+| `--page [Name=]<path>` | Tests one page instead of the whole application, such as `Web=/Orders`, or a full address. See [Testing a page](#testing-a-page). Default: the inputs file's `page`. |
+| `--page-files <files>` | With `--page`: the page's source files, comma-separated and relative to the solution folder. Default: found by the AI. |
 | `--model` | The model to test with. Default: the inputs file's model, else the default model. |
 | `--output` | The report folder. Default: `TestResults/ui-ux` or `TestResults/security`. |
 | `--fail-on` | Which findings fail the test (exit code `1`). See below. |
@@ -81,6 +83,22 @@ Free the applications' ports first: an application already holding one is stoppe
 
 A date and a time span are resolved from the git history, so they also work on CI, where the checkout has the full history (`fetch-depth: 0`). The test prints the commit it counted from.
 
+### Testing a page
+
+`--page` tests [one page](ai-testing.md#testing-a-page) of an application instead of the whole application:
+
+```bash
+abp test security --solution MyCompany.MyProject.abpsln --mode both --url Web=https://localhost:44302 --page Web=/Orders
+abp test ui-ux --solution MyCompany.MyProject.abpsln --mode codebase --page /Orders --page-files src/MyCompany.MyProject.Web/Pages/Orders/Index.cshtml,src/MyCompany.MyProject.Web/Pages/Orders/Index.cshtml.cs
+```
+
+- The name before `=` is the application's name in `--url` (or in the inputs file's `targets`); it can be left out when there is one application. A full address, such as `https://localhost:44302/Orders`, names the application by its address.
+- Only that application is tested. Without `--page-files`, the AI finds the page's files, and the Security Test also reads the page's API calls from the running application.
+- The test prints what it covers before it starts: the page, its files, its API calls, and the address of its API when the page calls it in another application (such as a React or Angular page's API host; give that application in `--url` too).
+- A test that reviews the code only, of a page whose files cannot be found, stops with exit code `2`. Name the files with `--page-files`.
+
+The inputs file can hold the page too, as `page` (see [the inputs file](ai-testing.md#the-inputs-file)); `--page` wins over it.
+
 ## Reports
 
 | Test | Files |
@@ -88,13 +106,15 @@ A date and a time span are resolved from the git history, so they also work on C
 | `ui-ux` | `ui-ux-test.json` and `ui-ux-test.md`, with the screenshots beside them |
 | `security` | `security-test.json`, `security-test.md` and `security-test.sarif` |
 
+The reports of a page's test name the page: a *Page tested* line under the Markdown title, `scope` at the top of the JSON, and `scope` in the `properties` of the SARIF run.
+
 ## Exit Codes
 
 | Code | Meaning |
 | --- | --- |
 | `0` | Passed. |
 | `1` | Findings past `--fail-on`. |
-| `2` | Error: the test could not run or finish (for example, the applications did not start, the sign-in failed, or the code review failed). |
+| `2` | Error: the test could not run or finish (for example, the applications did not start, the sign-in failed, the code review failed, or the page given with `--page` has no application or no files to review). |
 | `3` | The AI stopped the test (for example, no credits left). The report holds what was found until then. |
 | `4` | The AI cannot be used: sign in, or check the license. |
 
