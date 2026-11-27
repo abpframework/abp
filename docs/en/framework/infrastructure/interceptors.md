@@ -154,6 +154,10 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 
 ## Advanced Topics
 
+### Intercepting Methods Returning ValueTask
+
+A method returning `ValueTask` or `ValueTask<T>` is intercepted like a method returning `Task` or `Task<T>`: the interceptor runs until the returned `ValueTask` completes, and `invocation.ReturnValue` contains the result of the method. A method with a `ref`, `out` or `in` parameter is intercepted synchronously, because the proxy has to set these parameters when the method returns.
+
 ### Intercepting Methods Returning IAsyncEnumerable
 
 A method returning `IAsyncEnumerable<T>` is intercepted like a method returning `Task<T>`: the interceptor runs when the method is called, and `invocation.ProceedAsync()` only creates the sequence. The sequence does its work later, when the caller enumerates it, so an interceptor does not cover the enumeration by default. If an interceptor throws (for example, an authorization or validation error), the exception is thrown when the sequence is enumerated.

@@ -16,7 +16,8 @@ public class AbpAsyncDeterminationInterceptor<TInterceptor> : AsyncDetermination
 
     public override void Intercept(IInvocation invocation)
     {
-        if (CastleAsyncEnumerableAbpInterceptor.TryIntercept(invocation, _abpInterceptor))
+        if (CastleAsyncEnumerableAbpInterceptor.TryIntercept(invocation, _abpInterceptor) ||
+            CastleValueTaskAbpInterceptor.TryIntercept(invocation, _abpInterceptor))
         {
             return;
         }

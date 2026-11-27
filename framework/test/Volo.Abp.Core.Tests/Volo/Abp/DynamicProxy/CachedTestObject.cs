@@ -18,6 +18,12 @@ public class CachedTestObject
         return v;
     }
 
+    public virtual async ValueTask<int> GetValueValueTaskAsync(int v)
+    {
+        await Task.Delay(5);
+        return v;
+    }
+
     public virtual async IAsyncEnumerable<int> GetValuesAsync(int v)
     {
         await Task.Delay(5);

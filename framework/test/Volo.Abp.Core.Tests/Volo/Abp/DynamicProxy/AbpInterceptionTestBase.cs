@@ -96,6 +96,132 @@ public abstract class AbpInterceptionTestBase<TStartupModule> : AbpAsyncIntegrat
     }
 
     [Fact]
+    public async Task Should_Intercept_ValueTask_Method_Without_Return_Value()
+    {
+        var target = ServiceProvider.GetRequiredService<SimpleInterceptionTargetClass>();
+
+        await target.DoItValueTaskAsync();
+
+        target.Logs.Count.ShouldBe(7);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("EnterDoItValueTaskAsync");
+        target.Logs[3].ShouldBe("MiddleDoItValueTaskAsync");
+        target.Logs[4].ShouldBe("ExitDoItValueTaskAsync");
+        target.Logs[5].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
+        target.Logs[6].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
+    }
+
+    [Fact]
+    public async Task Should_Intercept_ValueTask_Method_With_Return_Value()
+    {
+        var target = ServiceProvider.GetRequiredService<SimpleInterceptionTargetClass>();
+
+        var result = await target.GetValueValueTaskAsync();
+
+        result.ShouldBe(42);
+        target.Logs.Count.ShouldBe(7);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("EnterGetValueValueTaskAsync");
+        target.Logs[3].ShouldBe("MiddleGetValueValueTaskAsync");
+        target.Logs[4].ShouldBe("ExitGetValueValueTaskAsync");
+        target.Logs[5].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
+        target.Logs[6].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
+    }
+
+    [Fact]
+    public async Task Should_Intercept_Completed_ValueTask_Method()
+    {
+        var target = ServiceProvider.GetRequiredService<SimpleInterceptionTargetClass>();
+
+        var result = await target.GetCompletedValueValueTaskAsync();
+
+        result.ShouldBe(42);
+        target.Logs.Count.ShouldBe(5);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("ExecutingGetCompletedValueValueTaskAsync");
+        target.Logs[3].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
+        target.Logs[4].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
+    }
+
+    [Fact]
+    public async Task Should_Throw_Exception_Of_ValueTask_Method_When_Awaited()
+    {
+        var target = ServiceProvider.GetRequiredService<SimpleInterceptionTargetClass>();
+
+        var valueTask = target.ThrowValueTaskAsync();
+
+        var exception = await Assert.ThrowsAsync<UserFriendlyException>(async () => await valueTask);
+        exception.Message.ShouldBe("ThrowValueTaskAsync");
+        target.Logs.Count.ShouldBe(3);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("EnterThrowValueTaskAsync");
+    }
+
+    [Fact]
+    public async Task Should_Throw_Synchronous_Exception_Of_ValueTask_Method_When_Awaited()
+    {
+        var target = ServiceProvider.GetRequiredService<SimpleInterceptionTargetClass>();
+
+        var valueTask = target.ThrowBeforeReturningValueTask();
+
+        var exception = await Assert.ThrowsAsync<UserFriendlyException>(async () => await valueTask);
+        exception.Message.ShouldBe("ThrowBeforeReturningValueTask");
+        target.Logs.Count.ShouldBe(3);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("ExecutingThrowBeforeReturningValueTask");
+    }
+
+    [Fact]
+    public async Task Should_Intercept_ValueTask_Method_With_Out_Parameter()
+    {
+        var target = ServiceProvider.GetRequiredService<SimpleInterceptionTargetClass>();
+
+        var result = await target.GetValueWithOutParameterValueTaskAsync(out var value);
+
+        result.ShouldBe(42);
+        value.ShouldBe(43);
+        target.Logs.Count.ShouldBe(5);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("ExecutingGetValueWithOutParameterValueTaskAsync");
+        target.Logs[3].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
+        target.Logs[4].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
+    }
+
+    [Fact]
+    public async Task Should_Intercept_Generic_ValueTask_Method()
+    {
+        var target = ServiceProvider.GetRequiredService<SimpleInterceptionTargetClass>();
+
+        (await target.EchoValueTaskAsync("abp")).ShouldBe("abp");
+
+        target.Logs.Count.ShouldBe(6);
+        target.Logs[0].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_BeforeInvocation");
+        target.Logs[1].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_BeforeInvocation");
+        target.Logs[2].ShouldBe("EnterEchoValueTaskAsync");
+        target.Logs[3].ShouldBe("ExitEchoValueTaskAsync");
+        target.Logs[4].ShouldBe("SimpleAsyncInterceptor2_InterceptAsync_AfterInvocation");
+        target.Logs[5].ShouldBe("SimpleAsyncInterceptor_InterceptAsync_AfterInvocation");
+
+        (await target.EchoValueTaskAsync(42)).ShouldBe(42);
+    }
+
+    [Fact]
+    public async Task Should_Cache_Results_ValueTask()
+    {
+        var target = ServiceProvider.GetRequiredService<CachedTestObject>();
+
+        (await target.GetValueValueTaskAsync(42)).ShouldBe(42);
+        (await target.GetValueValueTaskAsync(43)).ShouldBe(42);
+        (await target.GetValueValueTaskAsync(44)).ShouldBe(42);
+    }
+
+    [Fact]
     public async Task Should_Cache_Results_Async()
     {
         //Arrange
