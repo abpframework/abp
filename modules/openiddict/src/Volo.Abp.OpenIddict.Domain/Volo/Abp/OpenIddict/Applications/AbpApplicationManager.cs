@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Options;
 using OpenIddict.Abstractions;
 using OpenIddict.Core;
 using Volo.Abp.EventBus.Distributed;
+using Volo.Abp.OpenIddict.Tokens;
 
 namespace Volo.Abp.OpenIddict.Applications;
 
@@ -14,6 +16,8 @@ public class AbpApplicationManager : OpenIddictApplicationManager<OpenIddictAppl
 {
     protected AbpOpenIddictIdentifierConverter IdentifierConverter { get; }
     protected IDistributedEventBus DistributedEventBus { get; }
+    protected IOpenIddictTokenCache<OpenIddictTokenModel> TokenCache { get; }
+    protected IOpenIddictTokenStore<OpenIddictTokenModel> TokenStore { get; }
 
     public AbpApplicationManager(
         [NotNull] IOpenIddictApplicationCache<OpenIddictApplicationModel> cache,
@@ -21,11 +25,50 @@ public class AbpApplicationManager : OpenIddictApplicationManager<OpenIddictAppl
         [NotNull] IOptionsMonitor<OpenIddictCoreOptions> options,
         [NotNull] IOpenIddictApplicationStore<OpenIddictApplicationModel> resolver,
         AbpOpenIddictIdentifierConverter identifierConverter,
-        IDistributedEventBus distributedEventBus)
+        IDistributedEventBus distributedEventBus,
+        IOpenIddictTokenCache<OpenIddictTokenModel> tokenCache,
+        IOpenIddictTokenStore<OpenIddictTokenModel> tokenStore)
         : base(cache, logger, options, resolver)
     {
         IdentifierConverter = identifierConverter;
         DistributedEventBus = distributedEventBus;
+        TokenCache = tokenCache;
+        TokenStore = tokenStore;
+    }
+
+    public override async ValueTask DeleteAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
+    {
+        var tokens = new List<OpenIddictTokenModel>();
+        if (!Options.CurrentValue.DisableEntityCaching)
+        {
+            await foreach (var token in TokenStore.FindByApplicationIdAsync(IdentifierConverter.ToString(application.Id), cancellationToken))
+            {
+                tokens.Add(token);
+            }
+        }
+
+        await base.DeleteAsync(application, cancellationToken);
+
+        // The store deletes the tokens in its own unit of work, so they are already gone from the database here.
+        await RemoveDeletedTokensFromCacheAsync(tokens);
+    }
+
+    protected virtual async Task RemoveDeletedTokensFromCacheAsync(List<OpenIddictTokenModel> tokens)
+    {
+        using (var cancellationTokenSource = new CancellationTokenSource())
+        {
+            try
+            {
+                foreach (var token in tokens)
+                {
+                    await TokenCache.RemoveAsync(token, cancellationTokenSource.Token);
+                }
+            }
+            catch (Exception exception)
+            {
+                Logger.LogWarning(exception, "Could not remove the deleted tokens from the cache.");
+            }
+        }
     }
 
     public override async ValueTask UpdateAsync(OpenIddictApplicationModel application, CancellationToken cancellationToken = default)
