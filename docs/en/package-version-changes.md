@@ -7,6 +7,19 @@
 
 # Package Version Changes
 
+## 11.1.0-rc.1
+
+| Package | Old Version | New Version | PR |
+|---------|-------------|-------------|-----|
+| ModelContextProtocol | 0.5.0-preview.1 | 1.1.0 | #26564 |
+
+**Added:**
+
+| Package | Version | PR |
+|---------|---------|-----|
+| Microsoft.Extensions.AI.Abstractions | 10.3.0 | #26564 |
+| ModelContextProtocol.AspNetCore | 1.1.0 | #26564 |
+
 ## 11.0.1
 
 | Package | Old Version | New Version | PR |
