@@ -28,6 +28,25 @@ public class RegularTestControllerClientProxy_Tests : AbpHttpClientTestBase
     }
 
     [Fact]
+    public async Task IncrementValueWithValueTaskAsync()
+    {
+        (await _controller.IncrementValueWithValueTaskAsync(42)).ShouldBe(43);
+    }
+
+    [Fact]
+    public async Task DoNothingWithValueTaskAsync()
+    {
+        await _controller.DoNothingWithValueTaskAsync();
+    }
+
+    [Fact]
+    public async Task GetValueTaskExceptionAsync()
+    {
+        var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.GetValueTaskExceptionAsync());
+        exception.Error.Message.ShouldBe("This is a ValueTask error message!");
+    }
+
+    [Fact]
     public async Task GetException1Async()
     {
         var exception = await Assert.ThrowsAsync<AbpRemoteCallException>(async () => await _controller.GetException1Async());

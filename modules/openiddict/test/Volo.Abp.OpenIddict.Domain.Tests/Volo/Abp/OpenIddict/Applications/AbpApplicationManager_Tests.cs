@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using OpenIddict.Abstractions;
 using Shouldly;
 using Xunit;
 
@@ -46,5 +47,17 @@ public class AbpApplicationManager_Tests : OpenIddictDomainTestBase
 
         app1.ClientUri.ShouldBe(descriptor.ClientUri);
         app1.LogoUri.ShouldBe(descriptor.LogoUri);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_Should_Remove_Tokens_From_Cache()
+    {
+        var tokenManager = ServiceProvider.GetRequiredService<IOpenIddictTokenManager>();
+        (await tokenManager.FindByIdAsync(_testData.Token2Id.ToString())).ShouldNotBeNull();
+
+        var app2 = await _applicationManager.FindByIdAsync(_testData.App2Id.ToString());
+        await _applicationManager.DeleteAsync(app2);
+
+        (await tokenManager.FindByIdAsync(_testData.Token2Id.ToString())).ShouldBeNull();
     }
 }

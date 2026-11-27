@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -21,8 +20,6 @@ internal static class CastleAsyncEnumerableAbpInterceptor
 
     private static readonly ConcurrentDictionary<Type, AsyncEnumerableHandler> Handlers = new();
 
-    private static readonly ConcurrentDictionary<MethodInfo, bool> MethodsWithByRefParameters = new();
-
     public static bool TryIntercept(IInvocation invocation, IAbpInterceptor interceptor)
     {
         var returnType = invocation.Method.ReturnType;
@@ -31,7 +28,7 @@ internal static class CastleAsyncEnumerableAbpInterceptor
             return false;
         }
 
-        if (MethodsWithByRefParameters.GetOrAdd(invocation.Method, method => method.GetParameters().Any(p => p.ParameterType.IsByRef)))
+        if (CastleByRefParameterChecker.HasByRefParameters(invocation.Method))
         {
             return false;
         }

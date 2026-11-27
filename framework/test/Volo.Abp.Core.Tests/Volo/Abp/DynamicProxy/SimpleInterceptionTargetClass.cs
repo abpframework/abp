@@ -37,4 +37,57 @@ public class SimpleInterceptionTargetClass : ICanLogOnObject
         await Task.Delay(5);
         Logs.Add("ExitDoItAsync");
     }
+
+    public virtual async ValueTask<int> GetValueValueTaskAsync()
+    {
+        Logs.Add("EnterGetValueValueTaskAsync");
+        await Task.Delay(5);
+        Logs.Add("MiddleGetValueValueTaskAsync");
+        await Task.Delay(5);
+        Logs.Add("ExitGetValueValueTaskAsync");
+        return 42;
+    }
+
+    public virtual async ValueTask DoItValueTaskAsync()
+    {
+        Logs.Add("EnterDoItValueTaskAsync");
+        await Task.Delay(5);
+        Logs.Add("MiddleDoItValueTaskAsync");
+        await Task.Delay(5);
+        Logs.Add("ExitDoItValueTaskAsync");
+    }
+
+    public virtual ValueTask<int> GetCompletedValueValueTaskAsync()
+    {
+        Logs.Add("ExecutingGetCompletedValueValueTaskAsync");
+        return new ValueTask<int>(42);
+    }
+
+    public virtual async ValueTask ThrowValueTaskAsync()
+    {
+        Logs.Add("EnterThrowValueTaskAsync");
+        await Task.Delay(5);
+        throw new UserFriendlyException("ThrowValueTaskAsync");
+    }
+
+    public virtual ValueTask ThrowBeforeReturningValueTask()
+    {
+        Logs.Add("ExecutingThrowBeforeReturningValueTask");
+        throw new UserFriendlyException("ThrowBeforeReturningValueTask");
+    }
+
+    public virtual ValueTask<int> GetValueWithOutParameterValueTaskAsync(out int value)
+    {
+        Logs.Add("ExecutingGetValueWithOutParameterValueTaskAsync");
+        value = 43;
+        return new ValueTask<int>(42);
+    }
+
+    public virtual async ValueTask<T> EchoValueTaskAsync<T>(T value)
+    {
+        Logs.Add("EnterEchoValueTaskAsync");
+        await Task.Delay(5);
+        Logs.Add("ExitEchoValueTaskAsync");
+        return value;
+    }
 }
