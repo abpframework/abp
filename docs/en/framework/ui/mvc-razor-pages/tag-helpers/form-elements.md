@@ -268,7 +268,12 @@ You can set some of the attributes on your c# property, or directly on HTML tag.
 #### Tag Attributes
 
 - `asp-items`: Sets the select data. This Should be a list of SelectListItem.
-- `Inline`: If true, radio buttons will be in single line, next to each other. If false, they will be under each other.
+- `inline`: If `true`, radio buttons will be in single line, next to each other. If false, they will be under each other.
+- `suppress-label`: If `true`, Hidden label text.
+- `button-style`: If true, Display as button style.
+    - `use-button-group`: If `true`, Display as a button group.
+    - `button-type`: Default `AbpButtonType.Default`
+    - `button-size`: Default `AbpButtonSize.Default`.
 
 ## abp-date-picker & abp-date-range-picker
 
