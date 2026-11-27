@@ -20,6 +20,12 @@ public interface IRegularTestController
 
     Task<int> IncrementValueAsync(int value);
 
+    ValueTask<int> IncrementValueWithValueTaskAsync(int value);
+
+    ValueTask DoNothingWithValueTaskAsync();
+
+    ValueTask GetValueTaskExceptionAsync();
+
     Task<string> GetPlainStringAsync();
 
     Task<string> GetProducesJsonStringAsync();

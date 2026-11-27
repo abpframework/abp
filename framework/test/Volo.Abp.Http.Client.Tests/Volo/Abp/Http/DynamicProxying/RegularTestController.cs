@@ -78,6 +78,29 @@ public class RegularTestController : AbpController, IRegularTestController
     }
 
     [HttpGet]
+    [Route("increment-value-task")]
+    public async ValueTask<int> IncrementValueWithValueTaskAsync(int value)
+    {
+        await Task.Delay(5);
+        return value + 1;
+    }
+
+    [HttpPost]
+    [Route("do-nothing-value-task")]
+    public async ValueTask DoNothingWithValueTaskAsync()
+    {
+        await Task.Delay(5);
+    }
+
+    [HttpGet]
+    [Route("get-value-task-exception")]
+    public async ValueTask GetValueTaskExceptionAsync()
+    {
+        await Task.Delay(5);
+        throw new UserFriendlyException("This is a ValueTask error message!");
+    }
+
+    [HttpGet]
     [Route("plain-string")]
     public Task<string> GetPlainStringAsync()
     {
