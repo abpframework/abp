@@ -48,8 +48,11 @@ public class AbpTokenManager : OpenIddictTokenManager<OpenIddictTokenModel>
     {
         var count = await base.RevokeAsync(subject, client, status, type, cancellationToken);
 
-        // The status filter is omitted because the revoked tokens no longer match it.
-        await RemoveFromCacheAsync(ct => Store.FindAsync(subject, client, null, type, ct));
+        if (count > 0)
+        {
+            // The revoked tokens no longer match the original status filter.
+            await RemoveFromCacheAsync(ct => Store.FindAsync(subject, client, OpenIddictConstants.Statuses.Revoked, type, ct));
+        }
 
         return count;
     }
@@ -57,21 +60,30 @@ public class AbpTokenManager : OpenIddictTokenManager<OpenIddictTokenModel>
     public async override ValueTask<long> RevokeByApplicationIdAsync(string identifier, CancellationToken cancellationToken = default)
     {
         var count = await base.RevokeByApplicationIdAsync(identifier, cancellationToken);
-        await RemoveFromCacheAsync(ct => Store.FindByApplicationIdAsync(identifier, ct));
+        if (count > 0)
+        {
+            await RemoveFromCacheAsync(ct => Store.FindByApplicationIdAsync(identifier, ct));
+        }
         return count;
     }
 
     public async override ValueTask<long> RevokeByAuthorizationIdAsync(string identifier, CancellationToken cancellationToken = default)
     {
         var count = await base.RevokeByAuthorizationIdAsync(identifier, cancellationToken);
-        await RemoveFromCacheAsync(ct => Store.FindByAuthorizationIdAsync(identifier, ct));
+        if (count > 0)
+        {
+            await RemoveFromCacheAsync(ct => Store.FindByAuthorizationIdAsync(identifier, ct));
+        }
         return count;
     }
 
     public async override ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken = default)
     {
         var count = await base.RevokeBySubjectAsync(subject, cancellationToken);
-        await RemoveFromCacheAsync(ct => Store.FindBySubjectAsync(subject, ct));
+        if (count > 0)
+        {
+            await RemoveFromCacheAsync(ct => Store.FindBySubjectAsync(subject, ct));
+        }
         return count;
     }
 

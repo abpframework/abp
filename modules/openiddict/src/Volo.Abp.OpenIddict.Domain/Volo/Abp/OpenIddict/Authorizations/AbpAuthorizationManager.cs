@@ -75,8 +75,11 @@ public class AbpAuthorizationManager : OpenIddictAuthorizationManager<OpenIddict
     {
         var count = await base.RevokeAsync(subject, client, status, type, cancellationToken);
 
-        // The status filter is omitted because the revoked authorizations no longer match it.
-        await RemoveFromCacheAsync(ct => Store.FindAsync(subject, client, null, type, ImmutableArray<string>.Empty, ct));
+        if (count > 0)
+        {
+            // The revoked authorizations no longer match the original status filter.
+            await RemoveFromCacheAsync(ct => Store.FindAsync(subject, client, OpenIddictConstants.Statuses.Revoked, type, ImmutableArray<string>.Empty, ct));
+        }
 
         return count;
     }
@@ -84,14 +87,20 @@ public class AbpAuthorizationManager : OpenIddictAuthorizationManager<OpenIddict
     public async override ValueTask<long> RevokeByApplicationIdAsync(string identifier, CancellationToken cancellationToken = default)
     {
         var count = await base.RevokeByApplicationIdAsync(identifier, cancellationToken);
-        await RemoveFromCacheAsync(ct => Store.FindByApplicationIdAsync(identifier, ct));
+        if (count > 0)
+        {
+            await RemoveFromCacheAsync(ct => Store.FindByApplicationIdAsync(identifier, ct));
+        }
         return count;
     }
 
     public async override ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken = default)
     {
         var count = await base.RevokeBySubjectAsync(subject, cancellationToken);
-        await RemoveFromCacheAsync(ct => Store.FindBySubjectAsync(subject, ct));
+        if (count > 0)
+        {
+            await RemoveFromCacheAsync(ct => Store.FindBySubjectAsync(subject, ct));
+        }
         return count;
     }
 
