@@ -30,21 +30,12 @@ public class AbpOpenIddictTokenCache : AbpOpenIddictCacheBase<OpenIddictToken, O
         await Cache.SetAsync($"{nameof(FindByReferenceIdAsync)}_{await Store.GetReferenceIdAsync(token, cancellationToken)}", token, token: cancellationToken);
     }
 
+    // Not cached: any filter can be omitted, so a changed token can't find all the cached lists that contain it.
     public virtual async IAsyncEnumerable<OpenIddictTokenModel> FindAsync(string subject, string client, string status, string type, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var tokens = await ArrayCache.GetOrAddAsync($"{nameof(FindAsync)}_{subject}_{client}_{status}_{type}", async () =>
+        await foreach (var token in Store.FindAsync(subject, client, status, type, cancellationToken))
         {
-            var tokens = new List<OpenIddictTokenModel>();
-            await foreach (var token in Store.FindAsync(subject, client, status, type, cancellationToken))
-            {
-                tokens.Add(token);
-                await AddAsync(token, cancellationToken);
-            }
-            return tokens.ToArray();
-        }, token: cancellationToken);
-
-        foreach (var token in tokens)
-        {
+            await AddAsync(token, cancellationToken);
             yield return token;
         }
     }
@@ -146,7 +137,6 @@ public class AbpOpenIddictTokenCache : AbpOpenIddictCacheBase<OpenIddictToken, O
     {
         await ArrayCache.RemoveManyAsync(new[]
         {
-            $"{nameof(FindAsync)}_{await Store.GetSubjectAsync(token, cancellationToken)}_{await Store.GetApplicationIdAsync(token, cancellationToken)}_{Store.GetStatusAsync(token, cancellationToken)}_{Store.GetTypeAsync(token, cancellationToken)}",
             $"{nameof(FindByApplicationIdAsync)}_{await Store.GetApplicationIdAsync(token, cancellationToken)}",
             $"{nameof(FindByAuthorizationIdAsync)}_{await Store.GetAuthorizationIdAsync(token, cancellationToken)}",
             $"{nameof(FindBySubjectAsync)}_{await Store.GetSubjectAsync(token, cancellationToken)}"

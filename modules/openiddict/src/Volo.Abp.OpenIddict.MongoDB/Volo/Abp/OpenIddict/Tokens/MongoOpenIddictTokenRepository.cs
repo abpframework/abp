@@ -142,37 +142,35 @@ public class MongoOpenIddictTokenRepository : MongoDbRepository<OpenIddictMongoD
             filter &= Builders<OpenIddictToken>.Filter.Where(authorization => authorization.Type == type);
         }
 
-        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
-            filter           : filter,
-            update           : Builders<OpenIddictToken>.Update.Set(authorization => authorization.Status, OpenIddictConstants.Statuses.Revoked),
-            options          : null,
-            cancellationToken: cancellationToken)).MatchedCount;
+        return await RevokeManyAsync(filter, cancellationToken);
     }
 
     public virtual async ValueTask<long> RevokeByAuthorizationIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return (await (await GetCollectionAsync(GetCancellationToken(cancellationToken))).UpdateManyAsync(
-            filter           : token => token.AuthorizationId == id,
-            update           : Builders<OpenIddictToken>.Update.Set(token => token.Status, OpenIddictConstants.Statuses.Revoked),
-            options          : null,
-            cancellationToken: GetCancellationToken(cancellationToken))).MatchedCount;
+        return await RevokeManyAsync(Builders<OpenIddictToken>.Filter.Where(token => token.AuthorizationId == id), cancellationToken);
     }
 
     public virtual async ValueTask<long> RevokeByApplicationIdAsync(Guid applicationId, CancellationToken cancellationToken)
     {
-        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
-            filter           : token => token.ApplicationId == applicationId,
-            update           : Builders<OpenIddictToken>.Update.Set(token => token.Status, OpenIddictConstants.Statuses.Revoked),
-            options          : null,
-            cancellationToken: cancellationToken)).MatchedCount;
+        return await RevokeManyAsync(Builders<OpenIddictToken>.Filter.Where(token => token.ApplicationId == applicationId), cancellationToken);
     }
 
     public virtual async ValueTask<long> RevokeBySubjectAsync(string subject, CancellationToken cancellationToken)
     {
-        return (await (await GetCollectionAsync(cancellationToken)).UpdateManyAsync(
-            filter           : token => token.Subject == subject,
-            update           : Builders<OpenIddictToken>.Update.Set(token => token.Status, OpenIddictConstants.Statuses.Revoked),
-            options          : null,
-            cancellationToken: cancellationToken)).MatchedCount;
+        return await RevokeManyAsync(Builders<OpenIddictToken>.Filter.Where(token => token.Subject == subject), cancellationToken);
+    }
+
+    protected virtual async Task<long> RevokeManyAsync(FilterDefinition<OpenIddictToken> filter, CancellationToken cancellationToken)
+    {
+        cancellationToken = GetCancellationToken(cancellationToken);
+        var collection = await GetCollectionAsync(cancellationToken);
+        var sessionHandle = await GetSessionHandleAsync(cancellationToken);
+        var update = Builders<OpenIddictToken>.Update.Set(token => token.Status, OpenIddictConstants.Statuses.Revoked);
+
+        var result = sessionHandle != null
+            ? await collection.UpdateManyAsync(sessionHandle, filter, update, cancellationToken: cancellationToken)
+            : await collection.UpdateManyAsync(filter, update, cancellationToken: cancellationToken);
+
+        return result.MatchedCount;
     }
 }

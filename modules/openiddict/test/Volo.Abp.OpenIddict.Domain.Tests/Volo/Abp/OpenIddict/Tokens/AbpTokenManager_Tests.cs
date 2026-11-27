@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using OpenIddict.Abstractions;
@@ -89,6 +91,38 @@ public class AbpTokenManager_Tests : OpenIddictDomainTestBase
         }
 
         (await GetStatusAsync(_testData.Token2Id.ToString())).ShouldBe(OpenIddictConstants.Statuses.Revoked);
+    }
+
+    [Fact]
+    public async Task RevokeByAuthorizationIdAsync_Should_Remove_Tokens_From_Reference_Id_Cache()
+    {
+        var tokenCache = ServiceProvider.GetRequiredService<IOpenIddictTokenCache<OpenIddictTokenModel>>();
+        var referenceId = (await ServiceProvider.GetRequiredService<IOpenIddictTokenRepository>().FindByIdAsync(_testData.Token2Id)).ReferenceId;
+        (await tokenCache.FindByReferenceIdAsync(referenceId, CancellationToken.None)).Status.ShouldBe(OpenIddictConstants.Statuses.Valid);
+
+        (await _tokenManager.RevokeByAuthorizationIdAsync(_testData.Authorization1Id.ToString())).ShouldBe(2);
+
+        (await tokenCache.FindByReferenceIdAsync(referenceId, CancellationToken.None)).Status.ShouldBe(OpenIddictConstants.Statuses.Revoked);
+    }
+
+    [Fact]
+    public async Task RevokeBySubjectAsync_Should_Not_Leave_A_Stale_Filtered_List()
+    {
+        (await GetStatusesAsync(_tokenManager.FindAsync(_testData.Subject2, null, null, null))).ShouldBe(new[] { OpenIddictConstants.Statuses.Valid });
+
+        (await _tokenManager.RevokeBySubjectAsync(_testData.Subject2)).ShouldBe(1);
+
+        (await GetStatusesAsync(_tokenManager.FindAsync(_testData.Subject2, null, null, null))).ShouldBe(new[] { OpenIddictConstants.Statuses.Revoked });
+    }
+
+    private async Task<List<string>> GetStatusesAsync(IAsyncEnumerable<object> tokens)
+    {
+        var statuses = new List<string>();
+        await foreach (var token in tokens)
+        {
+            statuses.Add(await _tokenManager.GetStatusAsync(token));
+        }
+        return statuses;
     }
 
     private async Task<string> GetStatusAsync(string id)
