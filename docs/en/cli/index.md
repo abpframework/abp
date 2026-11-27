@@ -1422,6 +1422,8 @@ Options of `ui-ux` and `security`:
 - `--start`: Starts the solution's default run profile (containers, tasks, build and applications) before the test, and stops it afterwards.
 - `--profile`: The run profile `--start` uses.
 - `--changed-since`: Reviews only the code changed since a git ref (`origin/main`), a date (`2026-11-01`) or a time span (`7d`, `2w`).
+- `--page`: Tests one page instead of the whole application, as `[Name=]<path>` (such as `Web=/Orders`) or a full address. Default: the inputs file's `page`.
+- `--page-files`: With `--page`, the page's source files, comma-separated and relative to the solution folder. Default: found by the AI.
 - `--model`: The model to test with.
 - `--output`: The report folder. Default: `TestResults/ui-ux` or `TestResults/security`.
 - `--fail-on`: Which findings fail the test. `ui-ux`: `defect` (default), `confirmed`, `high` or `none`. `security`: `high` (default), `any`, `confirmed` or `none`.
@@ -1444,6 +1446,7 @@ abp test ui-ux --mode both --start
 abp test security --url Web=https://localhost:44302 --fail-on confirmed
 abp test security --mode codebase --changed-since origin/main
 abp test ui-ux --mode codebase --changed-since 7d
+abp test security --url Web=https://localhost:44302 --page Web=/Orders
 abp test init-ci
 ```
 

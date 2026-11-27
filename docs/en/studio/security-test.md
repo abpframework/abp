@@ -42,6 +42,8 @@ The test crawls the applications' pages in a browser, finds their HTTP API endpo
 
 For a single-page application (such as Angular) whose API takes a bearer token instead of a cookie, the test uses the token the application received at sign-in, and renews it before it expires.
 
+A single-page application (such as React or Angular) calls its API in another application, its API host. Each ticked application is attacked on its own address, so tick the API host under *Apps to Test* too. If a ticked application may call its API in a running application that is not ticked, *Start Test* asks first: *Include the API apps too?* offers to *Select them and start*, or to *Start as selected*. Without the API host, its API is tested only through the pages of the application that calls it, and a warning says so when the test sees it.
+
 ### Verification
 
 A separate AI agent checks each finding again, against the code and the running applications, and tries to reproduce it. The verification uses the session the test already signed in with, so it does not sign in again for each finding.
@@ -52,11 +54,21 @@ A separate AI agent checks each finding again, against the code and the running 
 
 Findings the verification proves false are removed.
 
+## Testing a Page
+
+When the test covers [a single page](ai-testing.md#testing-a-page), the attack stays on that page:
+
+- *Find Scope* lists the page's *API calls*: every action of each controller the page's files use, as the application's API description lists them. The calls the page makes while it is tested are added as the test goes.
+- The test sends requests only to the page, to its API calls (with any id and any method) and to what signing in needs. Other requests are refused, and the browser does not act on other pages. The check for exposed files (such as `.env` or `.git`) is left to the test of the whole application.
+- The code review covers only the page's files.
+
+When the page calls its API in another running application (a React or Angular page and its API host), the test sends its requests there; the dialog says *The page calls its API at …*. The API host is found from the running applications' API descriptions, or from the calls the page makes in the browser. Only an application of the solution that is running is attacked, never another service the page calls (such as an error tracker). The page's findings are verified against both applications.
+
 ## Findings
 
 The findings are listed with the most severe first; filter them with *Severity* and *Status*. Each finding shows its severity and CWE, a description, how it can be reached (anonymously or with a signed-in account), the attack path and the remediation.
 
-A finding of the code review shows its file and line, and opens it in the editor; a finding of the attack on a running application shows the request it was found with. *Checked against* names the application it was verified on.
+A finding of the code review shows its file and line, and opens it in the editor; a finding of the attack on a running application shows the request it was found with. *Checked against* names the application it was verified on; for a page whose API runs in another application, both.
 
 *Runtime Test Statistics* shows the pages crawled, the endpoints probed and the account the test was signed in with. *Export Results* can also save the findings as SARIF, for code scanning tools such as GitHub code scanning.
 

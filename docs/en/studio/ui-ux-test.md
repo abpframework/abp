@@ -50,6 +50,15 @@ The parts every page shares, such as the main menu, the header and the footer, a
 
 With *Incremental* on, only the code review is limited to the changed files; the localization comparison always covers every language file.
 
+## Testing a Page
+
+When the test covers [a single page](ai-testing.md#testing-a-page), it works the same way on that page alone:
+
+- It signs in and opens only that page; it does not follow its links to other pages. The links in the page's main content are still checked for being broken, up to 30, without testing the pages they open.
+- The checks without AI, the AI review and the AI interaction look at the page's main content (its `main` element, or the element with the `main` role), not at the menu, the header and the footer every page shares. Those are tested with the whole application.
+- The second pass that compares the pages for consistency is skipped, as there is one page.
+- The code review covers only the page's files.
+
 ## Two Test Accounts
 
 With a second test account, the applications are checked again as that account. Every page it reaches gets the checks without AI; only the pages the first account did not see get the AI review and interaction. A finding shows *Seen as* with the accounts that saw it, and re-verification signs in with that account.

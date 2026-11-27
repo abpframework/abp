@@ -189,7 +189,7 @@ You can see the context menu by right-clicking *Folder*. It will start/stop all 
 
 ### C# Application
 
-The .NET icon indicates that the application is a C# project. After we [add](#c-application) the C# applications to the root of the tree or folder, we can go to any C# application and right-click to view the context menu; `Start`, `Stop`, `Restart`, `Build`, `Browse`, `Health Status`, `Requests`, `Exceptions`, `Logs`, `Copy URL`, `Properties`, `Remove`, and `Open with`.
+The .NET icon indicates that the application is a C# project. After we [add](#c-application) the C# applications to the root of the tree or folder, we can go to any C# application and right-click to view the context menu; `Start`, `Stop`, `Restart`, `Build`, `Browse`, `AI Testing`, `Health Status`, `Requests`, `Exceptions`, `Logs`, `Copy URL`, `Properties`, `Remove`, and `Open with`.
 
 ![csharp-application-context-menu](images/solution-runner/csharp-application-context-menu.png)
 
@@ -221,6 +221,10 @@ When the C# application is connected to ABP Studio, it starts sending telemetry 
 - `Exceptions`: We can display all exceptions on this tab. It opens the *Exceptions* tab with selected application.
 - `Events`: Opens the *Events* tab filtered by this application. You can view all [Distributed Events](../framework/infrastructure/event-bus/distributed) sent or received by this application.
 - `Logs`: Clicking this option opens the *Logs* tab with adding the selected application filter.
+
+#### AI Testing
+
+The *AI Testing* submenu tests one page of the application with *Test a Page (UI/UX)...* or *Test a Page (Security)...*. It opens the [UI/UX Test](ui-ux-test.md) or the [Security Test](security-test.md) with this application chosen, and asks for the page to test; see [Testing a Page](ai-testing.md#testing-a-page). These options are only available while the application is running.
 
 #### Properties
 
@@ -268,6 +272,7 @@ CLI applications uses the [powershell](https://learn.microsoft.com/en-us/powersh
 
 - `Start`: Starts the application. Once it is started, *Start* and *Restart* options will be available.
 - `Browse`: This option is available when a *Launch URL* is specified upon adding the CLI application. It opens the *Browse* tab, can be clicked while the application is running.
+- `AI Testing`: Tests one page of the running application, as for a [C# application](#ai-testing).
 - `Logs`: It opens the *Logs* tab, we can see the logs for *Start* and *Stop* commands.
 - `Copy URL`: This option copies the *Launch URL* of the selected application. It is visible if there is a specified *Launch URL*
 - `Remove`: This option allows you to delete the selected application.
