@@ -76,7 +76,7 @@ dotnet tool install -g Volo.Abp.Studio.Cli
 Then create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
-abp new TodoApp -t app-nolayers{{if UI=="BlazorServer"}} -u blazor-server{{else if UI=="Blazor"}} -u blazor{{else if UI=="NG"}} -u angular{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
+abp new TodoApp -t app-nolayers{{if UI=="BlazorServer"}} -u blazor-server{{else if UI=="Blazor"}} -u blazor{{else if UI=="NG"}} -u angular{{end}}{{if BlazorUI=="Blazorise"}}{{if UI=="Blazor" || UI=="BlazorServer"}} -bul blazorise{{end}}{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
 ````
 
 {{if UI=="NG"}}

@@ -70,6 +70,10 @@ Once your configuration is done, click the *Next* button to navigate to the *UI 
 
 Here, you see all the possible UI options supported by that startup solution template. Pick the **{{ UI_Value }}**.
 
+{{ if UI == "Blazor" || UI == "BlazorServer" || UI == "BlazorWebApp" }}
+For a Blazor UI, the *UI Options* step lets you choose the Blazor component library. **MudBlazor** is selected by default. If you want to use Blazorise, click the *Use Blazorise instead* link below the MudBlazor option.
+{{ end }}
+
 Notice that; Once you select a UI type, some additional options will be available under the UI Framework list. You can further configure the options or leave them as default and click the Next button for the *Database Provider* selection screen:
 
 {{ if DB == "EF" }}

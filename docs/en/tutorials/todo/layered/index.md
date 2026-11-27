@@ -82,7 +82,7 @@ dotnet tool install -g Volo.Abp.Studio.Cli
 Create an empty folder, open a command-line terminal and execute the following command in the terminal:
 
 ````bash
-abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="BlazorWebApp"}} -u blazor-webapp{{else if UI=="NG"}} -u angular{{else if UI=="MAUIBlazor"}} -u maui-blazor{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
+abp new TodoApp{{if UI=="Blazor"}} -u blazor{{else if UI=="BlazorServer"}} -u blazor-server{{else if UI=="BlazorWebApp"}} -u blazor-webapp{{else if UI=="NG"}} -u angular{{else if UI=="MAUIBlazor"}} -u maui-blazor{{end}}{{if BlazorUI=="Blazorise"}}{{if UI=="Blazor" || UI=="BlazorServer" || UI=="BlazorWebApp" || UI=="MAUIBlazor"}} -bul blazorise{{end}}{{end}}{{if DB=="Mongo"}} -d mongodb{{end}}
 ````
 
 {{if UI=="NG"}}

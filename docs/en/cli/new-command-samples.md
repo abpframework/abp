@@ -101,6 +101,12 @@ The following commands are for creating Blazor WASM projects:
   abp new Acme.BookStore -t app -u blazor --mobile none
   ```
 
+* **Blazorise** UI library instead of the default MudBlazor:
+
+  ```bash
+  abp new Acme.BookStore -u blazor -bul blazorise
+  ```
+
 * **Entity Framework Core**, **separate Auth Server**, mobile app included:
   
   ```bash

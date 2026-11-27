@@ -167,6 +167,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       - `react`: React SPA UI. Only available when `--modern` flag is used. See [Modern Templates](#modern-templates) below.
       - `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
         - `--tiered`: The Auth Server project comes as a separate project and runs at a different endpoint. It separates the Auth Server from the API Host application. If not specified, you will have a single endpoint in the server side. (*Available for* ***Team*** *or higher licenses*)
+    - `--blazor-ui-library` or `-bul`: Specifies the Blazor UI component library. Only used when a Blazor UI framework is selected. Default library is `mudblazor`. Available libraries:
+      - `mudblazor`: MudBlazor.
+      - `blazorise`: Blazorise.
     - `--mobile` or `-m`: Specifies the mobile application framework. Default value is `none`. Available frameworks:
       - `none`: Without any mobile application.
       - `react-native`: React Native. This mobile option is only available for active **license owners**.
@@ -194,6 +197,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       - `blazor-server`: Blazor Server UI. There are some additional options for this template:
       - `react`: React SPA UI. Only available when `--modern` flag is used. See [Modern Templates](#modern-templates) below.
       - `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
+    - `--blazor-ui-library` or `-bul`: Specifies the Blazor UI component library. Only used when a Blazor UI framework is selected. Default library is `mudblazor`. Available libraries:
+      - `mudblazor`: MudBlazor.
+      - `blazorise`: Blazorise.
     - `--database-provider` or `-d`: Specifies the database provider. Default provider is `ef`. Available providers:
       - `ef`: Entity Framework Core.
       - `mongodb`: MongoDB.
@@ -215,6 +221,9 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
       - `maui-blazor`: Blazor Maui UI. There are some additional options for this template:
       - `react`: React SPA + React Admin Console. Only available when `--modern` flag is used. See [Modern Templates](#modern-templates) below.
       - `no-ui`: Without UI. No front-end layer will be created. There are some additional options for this template:
+    - `--blazor-ui-library` or `-bul`: Specifies the Blazor UI component library. Only used when a Blazor UI framework is selected. Default library is `mudblazor`. Available libraries:
+      - `mudblazor`: MudBlazor.
+      - `blazorise`: Blazorise.
     - `--mobile` or `-m`: Specifies the mobile application framework. Default value is `none`. Available frameworks:
       - `none`: Without any mobile application.
       - `react-native`: React Native.
@@ -255,7 +264,7 @@ For more samples, go to [ABP CLI Create Solution Samples](new-command-samples.md
   - `-chat`: Includes the Chat module.
   - `--ai-management`: Includes the AI Management module.
   - `--ai-providers`: Specifies AI providers (comma-separated). Available values: `Ollama`, `OpenAI`. Requires `--ai-management`.
-- `--legacy`: Generates a classic solution.
+- `--legacy`: Generates a classic solution. The `--blazor-ui-library` option does not apply to classic solutions.
   - `trust-version`: Trusts the user's version and does not check if the version exists or not. If the template with the given version is found in the cache, it will be used, otherwise throws an exception.
 
 ##### Modern Template Options
@@ -371,6 +380,9 @@ abp new-module Acme.BookStore -t module:ddd
   - `angular`: Angular UI.
   - `blazor`: Blazor UI.
   - `blazor-server`: Blazor Server UI.
+- `--blazor-ui-library` or `-bul`: Specifies the Blazor UI component library. Only used when a Blazor UI framework is selected. If not specified, the module uses the same library as the target solution, or `mudblazor` if the solution has no Blazor UI yet. Available libraries:
+  - `mudblazor`: MudBlazor.
+  - `blazorise`: Blazorise.
 
 #### Modern Module Templates
 
