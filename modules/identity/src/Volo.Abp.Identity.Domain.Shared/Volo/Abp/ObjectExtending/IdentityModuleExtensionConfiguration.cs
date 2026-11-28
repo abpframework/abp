@@ -49,4 +49,13 @@ public class IdentityModuleExtensionConfiguration : ModuleExtensionConfiguration
             configureAction
         );
     }
+
+    public IdentityModuleExtensionConfiguration ConfigureSecurityLog(
+        Action<EntityExtensionConfiguration> configureAction)
+    {
+        return this.ConfigureEntity(
+            IdentityModuleExtensionConsts.EntityNames.SecurityLog,
+            configureAction
+        );
+    }
 }
