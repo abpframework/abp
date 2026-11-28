@@ -15,6 +15,8 @@ public static class IdentityModuleExtensionConsts
         public const string OrganizationUnit = "OrganizationUnit";
 
         public const string IdentitySession = "IdentitySession";
+
+        public const string SecurityLog = "SecurityLog";
     }
 
     public static class ConfigurationNames
